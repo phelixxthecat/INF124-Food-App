@@ -70,12 +70,12 @@ export function CourierAssignmentModule({ couriers }: CourierAssignmentModulePro
                 onPress={() => console.log(`Courier pressed: ${courier.name}`)}
                 accessibilityRole="button"
                 accessibilityLabel={`${courier.name} courier card`}
-                style={({ pressed }) => [styles.courierRow, pressed && styles.rowPressed]}>
+                style={({ pressed }) => [styles.courierRow, { backgroundColor: theme.background, borderColor: theme.borderLight }, pressed && styles.rowPressed]}>
                 <Image source={{ uri: courier.avatarUri }} style={styles.avatar} contentFit="cover" />
 
                 <View style={styles.courierInfo}>
                   <View style={styles.nameRow}>
-                    <Text style={[styles.courierName, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{courier.name}</Text>
+                    <Text style={[styles.courierName, { color: theme.text, fontFamily: Fonts.sans }]}>{courier.name}</Text>
                     {classroomDelivery ? (
                       <View style={[styles.routeMarker, { backgroundColor: `${theme.accentGold}22` }]}>
                         <Ionicons name="school-outline" size={12} color={theme.accentGold} />
@@ -149,9 +149,7 @@ const styles = StyleSheet.create({
     gap: 12,
     borderRadius: 12,
     padding: 12,
-    backgroundColor: '#FFFFFF',
     borderWidth: StyleSheet.hairlineWidth,
-    borderColor: '#E5E5E5',
   },
   rowPressed: {
     transform: [{ scale: 0.995 }],

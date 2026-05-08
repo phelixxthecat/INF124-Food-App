@@ -38,7 +38,7 @@ export const INITIAL_ORDERS: PortalOrder[] = [
     status: 'Ready for Pickup',
     destinationType: 'Campus Pickup',
     thumbnailUri:
-      'https://images.unsplash.com/photo-1625944525533-473f1f7a7f9c?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=200&q=80',
   },
   {
     id: '4',
@@ -54,10 +54,10 @@ export const INITIAL_ORDERS: PortalOrder[] = [
 ];
 
 export const PICKUP_STATIONS: PickupStation[] = [
-  { id: 'ALDRICH_HALL', capacity: 85 },
-  { id: 'ICS_COURTYARD', capacity: 93 },
-  { id: 'STUDENT_CENTER', capacity: 61 },
-  { id: 'LANGSON_LIBRARY', capacity: 74 },
+  { id: 'ALDRICH HALL', capacity: 85 },
+  { id: 'ICS COURTYARD', capacity: 93 },
+  { id: 'STUDENT CENTER', capacity: 61 },
+  { id: 'LANGSON LIBRARY', capacity: 74 },
 ];
 
 export const WEEKLY_REVENUE: WeeklyRevenuePoint[] = [
@@ -110,6 +110,6 @@ export const COURIERS: Courier[] = [
     activeAssignments: 0,
     classroomRoute: null,
     avatarUri:
-      'https://images.unsplash.com/photo-1504593811423-6dd665756597?auto=format&fit=crop&w=200&q=80',
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
   },
 ];

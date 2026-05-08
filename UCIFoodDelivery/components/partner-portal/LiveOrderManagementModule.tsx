@@ -55,66 +55,64 @@ export function LiveOrderManagementModule({ orders, onStatusPress }: LiveOrderMa
   return (
     <View style={styles.sectionContainer}>
       <Text style={[styles.sectionTitle, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Live Order Management</Text>
-      <View style={[styles.card, { backgroundColor: theme.bgClean, borderColor: theme.borderLight }]}>
-        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-          <View style={styles.tableBody}>
-            <View style={[styles.tableHeaderRow, { borderBottomColor: theme.borderLight }]}>
-              <Text style={[styles.headerCell, styles.orderCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Order #</Text>
-              <Text style={[styles.headerCell, styles.itemsCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Items</Text>
-              <Text style={[styles.headerCell, styles.customerCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Customer</Text>
-              <Text style={[styles.headerCell, styles.locationCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Campus Location</Text>
-              <Text style={[styles.headerCell, styles.statusCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Status</Text>
-              <Text style={[styles.headerCell, styles.actionsCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Actions</Text>
-            </View>
-
-            {orders.map((order) => {
-              const classroomDelivery = order.destinationType === 'Classroom';
-
-              return (
-                <View key={order.id} style={[styles.tableRow, { borderBottomColor: theme.borderLight }]}>
-                  <View style={styles.orderCell}>
-                    <Text style={[styles.orderNumber, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{order.orderNumber}</Text>
-                    <View style={[styles.destinationPill, { borderColor: theme.borderLight, backgroundColor: theme.bgAltGray }]}>
-                      <Ionicons name={classroomDelivery ? 'school-outline' : 'storefront-outline'} size={12} color={theme.textSecondary} />
-                      <Text style={[styles.destinationText, { color: theme.textSecondary, fontFamily: Fonts.sans }]}>
-                        {order.destinationType}
-                      </Text>
-                    </View>
-                  </View>
-
-                  <View style={[styles.itemsCell, styles.itemsRow]}>
-                    <Image source={{ uri: order.thumbnailUri }} style={styles.thumbnail} contentFit="cover" />
-                    <Text style={[styles.cellText, { color: theme.textPrimary, fontFamily: Fonts.sans }]} numberOfLines={2}>
-                      {order.items}
-                    </Text>
-                  </View>
-
-                  <Text style={[styles.cellText, styles.customerCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{order.customer}</Text>
-
-                  <View style={[styles.locationCell, styles.locationRow]}>
-                    <Ionicons name="location-outline" size={14} color={theme.primaryBlue} />
-                    <Text style={[styles.cellText, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{order.campusLocation}</Text>
-                  </View>
-
-                  <View style={styles.statusCell}>
-                    <StatusBadge order={order} onPress={() => onStatusPress(order)} />
-                  </View>
-
-                  <View style={styles.actionsCell}>
-                    <Pressable
-                      accessibilityRole="button"
-                      accessibilityLabel={`View details for order ${order.orderNumber}`}
-                      onPress={() => console.log(`View details for ${order.orderNumber}`)}
-                      style={({ pressed }) => [styles.actionButton, pressed && styles.badgePressed]}>
-                      <Ionicons name="ellipsis-horizontal" size={18} color={theme.textSecondary} />
-                    </Pressable>
-                  </View>
+        <ScrollView horizontal style={[styles.card, { backgroundColor: theme.bgClean, borderColor: theme.borderLight }]} contentContainerStyle={styles.cardContainerStyle}>
+            <View style={styles.tableBody}>
+                <View style={[styles.tableHeaderRow, { borderBottomColor: theme.borderLight }]}>
+                <Text style={[styles.headerCell, styles.orderCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Order #</Text>
+                <Text style={[styles.headerCell, styles.itemsCell, { color: theme.textPrimary, fontFamily: Fonts.sans, flex: 1 }]}>Items</Text>
+                <Text style={[styles.headerCell, styles.customerCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Customer</Text>
+                <Text style={[styles.headerCell, styles.locationCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Campus Location</Text>
+                <Text style={[styles.headerCell, styles.statusCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Status</Text>
+                <Text style={[styles.headerCell, styles.actionsCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Actions</Text>
                 </View>
-              );
-            })}
-          </View>
+
+                {orders.map((order) => {
+                const classroomDelivery = order.destinationType === 'Classroom';
+
+                return (
+                    <View key={order.id} style={[styles.tableRow, { borderBottomColor: theme.borderLight }]}>
+                    <View style={styles.orderCell}>
+                        <Text style={[styles.orderNumber, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{order.orderNumber}</Text>
+                        <View style={[styles.destinationPill, { borderColor: theme.borderLight, backgroundColor: theme.bgAltGray }]}>
+                        <Ionicons name={classroomDelivery ? 'school-outline' : 'storefront-outline'} size={12} color={theme.textSecondary} />
+                        <Text style={[styles.destinationText, { color: theme.textSecondary, fontFamily: Fonts.sans }]}>
+                            {order.destinationType}
+                        </Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.itemsCell, styles.itemsRow]}>
+                        <Image source={{ uri: order.thumbnailUri }} style={styles.thumbnail} contentFit="cover" />
+                        <Text style={[styles.cellText, { color: theme.textPrimary, fontFamily: Fonts.sans }]} numberOfLines={2}>
+                        {order.items}
+                        </Text>
+                    </View>
+
+                    <Text style={[styles.cellText, styles.customerCell, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{order.customer}</Text>
+
+                    <View style={[styles.locationCell, styles.locationRow]}>
+                        <Ionicons name="location-outline" size={14} color={theme.primaryBlue} />
+                        <Text style={[styles.cellText, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>{order.campusLocation}</Text>
+                    </View>
+
+                    <View style={styles.statusCell}>
+                        <StatusBadge order={order} onPress={() => onStatusPress(order)} />
+                    </View>
+
+                    <View style={styles.actionsCell}>
+                        <Pressable
+                        accessibilityRole="button"
+                        accessibilityLabel={`View details for order ${order.orderNumber}`}
+                        onPress={() => console.log(`View details for ${order.orderNumber}`)}
+                        style={({ pressed }) => [styles.actionButton, pressed && styles.badgePressed]}>
+                        <Ionicons name="ellipsis-horizontal" size={18} color={theme.textSecondary} />
+                        </Pressable>
+                    </View>
+                    </View>
+                );
+                })}
+            </View>
         </ScrollView>
-      </View>
     </View>
   );
 }
@@ -131,10 +129,14 @@ const styles = StyleSheet.create({
   card: {
     borderWidth: 1,
     borderRadius: 12,
-    overflow: 'hidden',
+    width: '100%',
+  },
+  cardContainerStyle: {
+    flexGrow: 1, 
+    alignItems: 'stretch', 
   },
   tableBody: {
-    minWidth: 860,
+    width: '100%',
   },
   tableHeaderRow: {
     flexDirection: 'row',
@@ -159,12 +161,13 @@ const styles = StyleSheet.create({
     lineHeight: 18,
   },
   orderCell: {
-    width: 120,
+    width: 140,
     paddingRight: 12,
   },
   itemsCell: {
     width: 220,
     paddingRight: 12,
+    flexGrow: 1 
   },
   customerCell: {
     width: 150,
