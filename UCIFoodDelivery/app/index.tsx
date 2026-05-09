@@ -1,9 +1,14 @@
 import React from 'react';
+import { Stack } from "expo-router";
 import {StyleSheet, TouchableOpacity, View, ScrollView, Text, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import MapView, { Marker } from "react-native-maps";
 
 export default function OrderTracking() {
   return (
+    <>
+    <Stack.Screen options={{ headerShown: false }} />
+
     <View style={styles.container}>
       <ScrollView>
         {/* Header */}
@@ -17,7 +22,35 @@ export default function OrderTracking() {
 
         {/* Map Placeholder */}
         <View style={styles.mapContainer}>
-            <Image source={require('../assets/images/map-placeholder.png')} style={styles.mapImage} />
+            <MapView
+              style={styles.map}
+              initialRegion={{
+                latitude: 37.7749,
+                longitude: -122.4194,
+                latitudeDelta: 0.01,
+                longitudeDelta: 0.01,
+              }}
+              showsUserLocation={true}
+              showsMyLocationButton={true}
+            >
+              <Marker
+                coordinate={{ latitude: 37.7749, longitude: -122.4194 }}
+                title="Restaurant"
+                description="Where your food is being prepared"
+              />
+              <Marker
+                coordinate={{ latitude: 37.7799, longitude: -122.4294 }}
+                title="Driver"
+                description="Your driver is on the way"
+                pinColor="green"
+              />
+              <Marker
+                coordinate={{ latitude: 37.7849, longitude: -122.4394 }}
+                title="Delivery Location"
+                description="Your location"
+                pinColor="blue"
+              />
+            </MapView>
         </View>
 
 
@@ -30,7 +63,10 @@ export default function OrderTracking() {
           
           <View style={styles.statusContainer}>
               <View style={styles.statusItem}>
-                <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                <View style={styles.iconContainer}>
+                  <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                  <View style={styles.dottedLine} />
+                </View>
                 <View style={styles.statusTextContainer}>
                   <Text style={styles.statusText}>Order Placed</Text>
                   <Text style={styles.statusSubText}>11:26pm</Text>
@@ -38,7 +74,10 @@ export default function OrderTracking() {
             </View>
 
             <View style={styles.statusItem}>
-                <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                <View style={styles.iconContainer}>
+                  <Ionicons name="checkmark-circle" size={24} color="#4CAF50" />
+                  <View style={styles.dottedLine} />
+                </View>
                 <View style={styles.statusTextContainer}>
                   <Text style={styles.statusText}>On the Way</Text>
                   <Text style={styles.statusSubText}>11:32pm</Text>
@@ -46,7 +85,9 @@ export default function OrderTracking() {
             </View>
 
             <View style={styles.statusItem}>
-                <Ionicons name="ellipse" size={24} color="#FFC107" />
+                <View style={styles.iconContainer}>
+                  <Ionicons name="ellipse" size={24} color="#FFC107" />
+                </View>
                 <View style={styles.statusTextContainer}>
                   <Text style={styles.statusText}>Out for Delivery</Text>
                 </View>
@@ -67,6 +108,7 @@ export default function OrderTracking() {
         </View>
       </ScrollView>
     </View>
+  </>
   );
 }
 
@@ -79,6 +121,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 10,
+    paddingTop: 70,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
@@ -91,14 +134,14 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   mapContainer: {
-    height: 325,
-    margin: 5,
+    height: 370,
     borderRadius: 8,
     overflow: 'hidden',
   },
-  mapImage: {
+  map: {
     width: '100%',
     height: '100%',
+    borderRadius: 8,
   },
   etaBar: {
     flexDirection: 'row',
@@ -110,12 +153,12 @@ const styles = StyleSheet.create({
   },
   etaText: {
     fontSize: 20,
-    color: '#555',
+    color: '#3a3a3a',
   },
   etaTime: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: '#545454',
+    color: '#4f4f4f',
     marginVertical: 8,
   },
   etaContainer: {
@@ -132,7 +175,19 @@ const styles = StyleSheet.create({
   statusItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    paddingVertical: 6,
+    paddingVertical: 3,
+  },
+  iconContainer: {
+    alignItems: "center",
+    marginRight: 10,
+  },
+  dottedLine: {
+    width: 2,
+    height: 35,
+    borderStyle: "dotted",
+    borderWidth: 1,
+    borderColor: "#BDBDBD",
+    marginTop: 4,
   },
   statusText: {
     marginLeft: 8,
@@ -150,6 +205,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     paddingHorizontal: 20,
     paddingVertical: 12,
+    paddingBottom: 40,
     backgroundColor: '#f5f5f5',
   },
   driverAvatar: {
