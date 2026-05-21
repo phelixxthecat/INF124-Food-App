@@ -1,77 +1,43 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-} from 'react-native';
-
+import { View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { appStyles, UCIColors } from '../../../constants/appStyles';
 
 export default function AboutUsPage() {
   const router = useRouter();
 
+  const sections = [
+    { title: 'Our Mission', subtitle: 'Why ZotEats exists', route: '/AboutUsPages/missionPage' },
+    { title: 'Who We Serve', subtitle: 'Students, staff, and campus visitors', route: '/AboutUsPages/servePage' },
+    { title: 'How It Works', subtitle: 'Order, pickup, or campus delivery', route: '/AboutUsPages/howItWorksPage' },
+    { title: 'Why Choose Us', subtitle: 'Fast UCI-focused food access', route: '/AboutUsPages/whyUsPage' },
+    { title: 'Contact Info', subtitle: 'Get help or reach our team', route: '/AboutUsPages/contactPage' },
+  ];
+
   return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>About Us Page</Text>
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>About Us Page</Text>
 
-      <View style={styles.card}>
-
-        {/* BACK BUTTON */}
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={28} color="#000" />
+      <View style={appStyles.card}>
+        <Pressable style={appStyles.backButton} onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color={UCIColors.navy} />
         </Pressable>
 
-        <ScrollView
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          <Text style={appStyles.logo}>ZotEats</Text>
+          <Text style={appStyles.title}>About Us</Text>
 
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Our Mission</Text>
-
-            <Pressable style={styles.greyBox} onPress={() => router.push('/missionPage')}>
-              <Text style={styles.boxText}>Mission Content</Text>
+          {sections.map((section) => (
+            <Pressable
+              key={section.title}
+              style={styles.infoCard}
+              onPress={() => router.push(section.route as any)}
+            >
+              <Text style={styles.sectionTitle}>{section.title}</Text>
+              <Text style={styles.sectionSubtitle}>{section.subtitle}</Text>
             </Pressable>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Who we serve</Text>
-
-            <Pressable style={styles.greyBox}onPress={() => router.push('/servePage')}>
-              <Text style={styles.boxText}>Audience Content</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>How it Works</Text>
-
-            <Pressable style={styles.greyBox} onPress={() => router.push('/howItWorksPage')}>
-              <Text style={styles.boxText}>How It Works Content</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Why Choose Us</Text>
-
-            <Pressable style={styles.greyBox} onPress={() => router.push('/whyUsPage')}>
-              <Text style={styles.boxText}>Why Choose Us Content</Text>
-            </Pressable>
-          </View>
-
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Contact Info</Text>
-
-            <Pressable style={styles.greyBox} onPress={() => router.push('/contactPage')}>
-              <Text style={styles.boxText}>Contact Information</Text>
-            </Pressable>
-          </View>
-
+          ))}
         </ScrollView>
       </View>
     </View>
@@ -79,64 +45,29 @@ export default function AboutUsPage() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    position: 'relative',
-  },
-
-  backButton: {
-    position: 'absolute',
-    top: 18,
-    left: 18,
-    zIndex: 10,
-  },
-
   content: {
-    paddingTop: 70,
     alignItems: 'center',
+    paddingTop: 65,
     paddingBottom: 40,
   },
-
-  section: {
-    alignItems: 'center',
-    marginBottom: 26,
-  },
-
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#000',
-    marginBottom: 10,
-  },
-
-  greyBox: {
-    width: 150,
-    height: 70,
-    backgroundColor: '#d9d9d9',
+  infoCard: {
+    width: 250,
+    backgroundColor: UCIColors.cream,
+    borderRadius: 18,
     borderWidth: 1,
-    borderColor: '#888',
-    justifyContent: 'center',
-    alignItems: 'center',
+    borderColor: UCIColors.gold,
+    padding: 16,
+    marginBottom: 14,
   },
-
-  boxText: {
-    color: '#555',
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: UCIColors.navy,
+    marginBottom: 5,
+  },
+  sectionSubtitle: {
     fontSize: 12,
+    fontWeight: '600',
+    color: UCIColors.textGray,
   },
 });

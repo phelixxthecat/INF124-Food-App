@@ -2,46 +2,84 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { appStyles, UCIColors } from '../../../constants/appStyles';
 
 export default function ProfilePage() {
   const router = useRouter();
 
-  return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>Profile Page</Text>
+  const buttons = [
+    {
+      title: 'Favorite Orders',
+      route: '/ProfilePages/favoriteOrders',
+    },
+    {
+      title: 'Order History',
+      route: '/ProfilePages/orderHistory',
+    },
+    {
+      title: 'Saved Locations',
+      route: '/ProfilePages/savedLocations',
+    },
+    {
+      title: 'Notifications',
+      route: '/home',
+    },
+    {
+      title: 'Payment',
+      route: '/home',
+    },
+    {
+      title: 'Help & Support',
+      route: '/home',
+    },
+  ];
 
-      <View style={styles.card}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={28} color="#000" />
+  return (
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>Profile Page</Text>
+
+      <View style={appStyles.card}>
+        <Pressable
+          style={appStyles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color={UCIColors.navy}
+          />
         </Pressable>
 
-        <View style={styles.profilePic} />
-        <Text style={styles.profileText}>Profile pic</Text>
+        <View style={styles.profileSection}>
+          <View style={styles.profilePic} />
+
+          <Text style={styles.name}>
+            Anteater User
+          </Text>
+
+          <Text style={styles.email}>
+            student@uci.edu
+          </Text>
+        </View>
 
         <View style={styles.buttonGroup}>
-          <Pressable style={styles.button} onPress={() => router.push('/favoriteOrders')}>
-            <Text style={styles.buttonText}>Favorite Orders</Text>
-          </Pressable>
+          {buttons.map((button) => (
+            <Pressable
+              key={button.title}
+              style={styles.button}
+              onPress={() => router.push(button.route as any)}
+            >
+              <Text style={styles.buttonText}>
+                {button.title}
+              </Text>
 
-          <Pressable style={styles.button} onPress={() => router.push('/orderHistory')}>
-            <Text style={styles.buttonText}>Order History</Text>
-          </Pressable>
-
-          <Pressable style={styles.button} onPress={() => router.push('/savedLocations')}>
-            <Text style={styles.buttonText}>Saved Locations</Text>
-          </Pressable>
-
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Notification</Text>
-          </Pressable>
-
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Payment</Text>
-          </Pressable>
-
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Help & Support</Text>
-          </Pressable>
+              <Ionicons
+                name="chevron-forward"
+                size={18}
+                color={UCIColors.white}
+              />
+            </Pressable>
+          ))}
         </View>
       </View>
     </View>
@@ -49,58 +87,55 @@ export default function ProfilePage() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
+  profileSection: {
     alignItems: 'center',
+    marginTop: 70,
+    marginBottom: 35,
   },
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    position: 'relative',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
+
   profilePic: {
-    width: 150,
-    height: 150,
-    borderRadius: 75,
-    backgroundColor: '#d9d9d9',
-    marginTop: 80,
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+    backgroundColor: UCIColors.gray,
+    borderWidth: 4,
+    borderColor: UCIColors.gold,
   },
-  profileText: {
-    color: '#000',
-    fontSize: 12,
-    fontWeight: '700',
+
+  name: {
     marginTop: 18,
-    marginBottom: 50,
+    fontSize: 22,
+    fontWeight: '800',
+    color: UCIColors.navy,
   },
+
+  email: {
+    marginTop: 6,
+    fontSize: 13,
+    color: UCIColors.textGray,
+    fontWeight: '600',
+  },
+
   buttonGroup: {
-    gap: 18,
-  },
-  button: {
-    width: 175,
-    height: 45,
-    backgroundColor: '#1f1f1f',
-    justifyContent: 'center',
+    width: '100%',
     alignItems: 'center',
+    gap: 14,
   },
+
+  button: {
+    width: 240,
+    height: 52,
+    backgroundColor: UCIColors.navy,
+    borderRadius: 18,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+  },
+
   buttonText: {
-    color: '#fff',
-    fontSize: 12,
-    fontWeight: '700',
+    color: UCIColors.white,
+    fontSize: 14,
+    fontWeight: '800',
   },
 });

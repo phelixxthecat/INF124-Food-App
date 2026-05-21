@@ -2,26 +2,51 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { appStyles, UCIColors } from '../../../constants/appStyles';
 
-export default function orderHistory() {
+export default function OrderHistory() {
   const router = useRouter();
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>Order History Page</Text>
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>Order History</Text>
 
-      <View style={styles.card}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={28} color="#000" />
+      <View style={appStyles.card}>
+        <Pressable
+          style={appStyles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color={UCIColors.navy}
+          />
         </Pressable>
 
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>Order History</Text>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={appStyles.logo}>ZotEats</Text>
+          <Text style={appStyles.title}>Order History</Text>
 
           {[1, 2, 3, 4].map((item) => (
-            <View key={item} style={styles.orderItem}>
-              <Text style={styles.restaurantText}>Restaurant</Text>
-              <View style={styles.greyBox} />
+            <View key={item} style={styles.orderCard}>
+              <View style={styles.foodImage} />
+
+              <View style={styles.orderInfo}>
+                <Text style={styles.restaurant}>
+                  UTC Burger
+                </Text>
+
+                <Text style={styles.details}>
+                  2 Items • $24.99
+                </Text>
+
+                <Text style={styles.date}>
+                  April 22, 2026
+                </Text>
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -31,56 +56,50 @@ export default function orderHistory() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    position: 'relative',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
   content: {
     alignItems: 'center',
-    paddingTop: 70,
-    paddingBottom: 35,
+    paddingBottom: 40,
   },
-  title: {
-    color: '#000',
-    fontSize: 28,
-    fontWeight: '800',
-    marginBottom: 35,
-  },
-  orderItem: {
-    width: 255,
-    marginBottom: 16,
-  },
-  restaurantText: {
-    color: '#000',
-    fontSize: 11,
-    fontWeight: '700',
-    marginBottom: 5,
-  },
-  greyBox: {
-    width: 255,
-    height: 105,
-    backgroundColor: '#d9d9d9',
+
+  orderCard: {
+    width: 260,
+    flexDirection: 'row',
+    backgroundColor: UCIColors.white,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#999',
+    borderColor: '#ddd',
+    padding: 14,
+    marginBottom: 14,
+  },
+
+  foodImage: {
+    width: 78,
+    height: 78,
+    borderRadius: 16,
+    backgroundColor: UCIColors.gray,
+  },
+
+  orderInfo: {
+    marginLeft: 14,
+    justifyContent: 'center',
+  },
+
+  restaurant: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: UCIColors.navy,
+  },
+
+  details: {
+    marginTop: 4,
+    fontSize: 13,
+    color: UCIColors.black,
+    fontWeight: '600',
+  },
+
+  date: {
+    marginTop: 6,
+    fontSize: 12,
+    color: UCIColors.textGray,
   },
 });

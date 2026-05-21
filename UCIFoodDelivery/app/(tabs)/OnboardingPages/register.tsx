@@ -1,15 +1,8 @@
 import React, { useMemo, useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
-
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { appStyles, UCIColors } from '../../../constants/appStyles';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -21,134 +14,67 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const passwordChecks = useMemo(() => {
-    return {
-      length: password.length >= 6 && password.length <= 12,
-      special: /[^A-Za-z0-9]/.test(password),
-      number: /[0-9]/.test(password),
-      letter: /[A-Za-z]/.test(password),
-      match: password.length > 0 && password === confirmPassword,
-    };
-  }, [password, confirmPassword]);
+  const passwordChecks = useMemo(() => ({
+    length: password.length >= 6 && password.length <= 12,
+    special: /[^A-Za-z0-9]/.test(password),
+    number: /[0-9]/.test(password),
+    letter: /[A-Za-z]/.test(password),
+    match: password.length > 0 && password === confirmPassword,
+  }), [password, confirmPassword]);
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>Register Page</Text>
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>Register Page</Text>
 
-      <View style={styles.card}>
-        {/* BACK BUTTON */}
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={28} color="#000" />
+      <View style={appStyles.card}>
+        <Pressable style={appStyles.backButton} onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color={UCIColors.navy} />
         </Pressable>
 
-        <ScrollView
-          contentContainerStyle={styles.content}
-          showsVerticalScrollIndicator={false}
-        >
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          <Text style={appStyles.logo}>ZotEats</Text>
+          <Text style={styles.subtitle}>Create your UCI food account.</Text>
 
           <View style={styles.form}>
-            <Text style={styles.label}>Name</Text>
-            <TextInput
-              style={styles.input}
-              value={name}
-              onChangeText={setName}
-            />
+            <Text style={appStyles.label}>Name</Text>
+            <TextInput style={appStyles.input} value={name} onChangeText={setName} />
 
-            <Text style={styles.label}>Phone Number</Text>
-            <TextInput
-              style={styles.input}
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
+            <Text style={appStyles.label}>Phone Number</Text>
+            <TextInput style={appStyles.input} value={phoneNumber} onChangeText={setPhoneNumber} keyboardType="phone-pad" />
 
-            <Text style={styles.label}>Email Address</Text>
-            <TextInput
-              style={styles.input}
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
+            <Text style={appStyles.label}>Email Address</Text>
+            <TextInput style={appStyles.input} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
 
-            <Text style={styles.label}>Birthday</Text>
-            <TextInput
-              style={styles.input}
-              value={birthday}
-              onChangeText={setBirthday}
-              placeholder="MM/DD/YYYY"
-              placeholderTextColor="#999"
-            />
+            <Text style={appStyles.label}>Birthday</Text>
+            <TextInput style={appStyles.input} value={birthday} onChangeText={setBirthday} placeholder="MM/DD/YYYY" placeholderTextColor={UCIColors.textGray} />
 
-            <Text style={styles.label}>Create Password</Text>
-            <TextInput
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry
-            />
+            <Text style={appStyles.label}>Create Password</Text>
+            <TextInput style={appStyles.input} value={password} onChangeText={setPassword} secureTextEntry />
 
             <View style={styles.requirements}>
-              <Text
-                style={[
-                  styles.requirementText,
-                  passwordChecks.length && styles.checkedText,
-                ]}
-              >
+              <Text style={[styles.requirementText, passwordChecks.length && styles.checkedText]}>
                 {passwordChecks.length ? '✓' : '○'} 6-12 characters
               </Text>
-
-              <Text
-                style={[
-                  styles.requirementText,
-                  passwordChecks.special && styles.checkedText,
-                ]}
-              >
+              <Text style={[styles.requirementText, passwordChecks.special && styles.checkedText]}>
                 {passwordChecks.special ? '✓' : '○'} One special character
               </Text>
-
-              <Text
-                style={[
-                  styles.requirementText,
-                  passwordChecks.number && styles.checkedText,
-                ]}
-              >
+              <Text style={[styles.requirementText, passwordChecks.number && styles.checkedText]}>
                 {passwordChecks.number ? '✓' : '○'} One number
               </Text>
-
-              <Text
-                style={[
-                  styles.requirementText,
-                  passwordChecks.letter && styles.checkedText,
-                ]}
-              >
+              <Text style={[styles.requirementText, passwordChecks.letter && styles.checkedText]}>
                 {passwordChecks.letter ? '✓' : '○'} One letter
               </Text>
             </View>
 
-            <Text style={styles.label}>Confirm Password</Text>
-            <TextInput
-              style={styles.input}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-              secureTextEntry
-            />
+            <Text style={appStyles.label}>Confirm Password</Text>
+            <TextInput style={appStyles.input} value={confirmPassword} onChangeText={setConfirmPassword} secureTextEntry />
 
-            <Text
-              style={[
-                styles.requirementText,
-                passwordChecks.match && styles.checkedText,
-                styles.matchText,
-              ]}
-            >
+            <Text style={[styles.requirementText, passwordChecks.match && styles.checkedText]}>
               {passwordChecks.match ? '✓' : '○'} Passwords match
             </Text>
 
-            <Pressable style={styles.button}>
-              <Text style={styles.buttonText}>Register</Text>
+            <Pressable style={[appStyles.primaryButton, styles.registerButton]}>
+              <Text style={appStyles.primaryButtonText}>Register</Text>
             </Pressable>
           </View>
         </ScrollView>
@@ -158,103 +84,36 @@ export default function RegisterPage() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    position: 'relative',
-  },
-
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
-
   content: {
     alignItems: 'center',
-    paddingTop: 80,
+    paddingTop: 65,
     paddingBottom: 40,
   },
-
-  logo: {
-    fontSize: 38,
-    fontWeight: '800',
-    color: '#000',
-    marginBottom: 40,
-  },
-
-  form: {
-    width: 210,
-  },
-
-  label: {
-    fontSize: 11,
+  subtitle: {
+    marginTop: 8,
+    marginBottom: 28,
+    color: UCIColors.textGray,
     fontWeight: '700',
-    color: '#000',
-    marginBottom: 8,
   },
-
-  input: {
-    width: '100%',
-    height: 30,
-    borderWidth: 1,
-    borderColor: '#777',
-    backgroundColor: '#fff',
-    paddingHorizontal: 8,
-    marginBottom: 18,
-    color: '#000',
+  form: {
+    width: 230,
+    alignItems: 'center',
   },
-
   requirements: {
-    marginTop: -10,
-    marginBottom: 18,
+    width: '100%',
+    marginTop: -8,
+    marginBottom: 16,
   },
-
   requirementText: {
-    fontSize: 10,
-    color: '#999',
+    fontSize: 11,
+    color: UCIColors.textGray,
     marginBottom: 4,
   },
-
   checkedText: {
-    color: '#000',
-    fontWeight: '700',
+    color: UCIColors.navy,
+    fontWeight: '800',
   },
-
-  matchText: {
-    marginTop: -10,
-    marginBottom: 20,
-  },
-
-  button: {
-    width: 195,
-    height: 62,
-    backgroundColor: '#1f1f1f',
-    alignSelf: 'center',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 18,
-  },
-
-  buttonText: {
-    color: '#fff',
-    fontSize: 12,
+  registerButton: {
+    marginTop: 20,
   },
 });

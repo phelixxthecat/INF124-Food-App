@@ -1,43 +1,46 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  StyleSheet,
-} from 'react-native';
-
+import React, { useState } from 'react';
+import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { appStyles, UCIColors } from '../../../constants/appStyles';
 
 export default function LoginPage() {
   const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>Login Page</Text>
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>Login Page</Text>
 
-      <View style={styles.card}>
-
-        {/* BACK BUTTON */}
-        <Pressable
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Ionicons name="arrow-back" size={28} color="#000" />
+      <View style={appStyles.card}>
+        <Pressable style={appStyles.backButton} onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color={UCIColors.navy} />
         </Pressable>
 
-        <Text style={styles.logo}>Logo</Text>
+        <Text style={appStyles.logo}>ZotEats</Text>
+        <Text style={styles.subtitle}>Welcome back, Anteater.</Text>
 
         <View style={styles.form}>
-          <Text style={styles.label}>Email Address</Text>
-          <TextInput style={styles.input} />
+          <Text style={appStyles.label}>Email Address</Text>
+          <TextInput
+            style={appStyles.input}
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+          />
 
-          <Text style={styles.label}>Password</Text>
-          <TextInput style={styles.input} secureTextEntry />
+          <Text style={appStyles.label}>Password</Text>
+          <TextInput
+            style={appStyles.input}
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+          />
 
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}>Sign In</Text>
+          <Pressable style={appStyles.primaryButton} onPress={() => router.replace('/home')}>
+            <Text style={appStyles.primaryButtonText}>Sign In</Text>
           </Pressable>
         </View>
       </View>
@@ -46,77 +49,14 @@ export default function LoginPage() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    position: 'relative',
-  },
-
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
-
-  logo: {
-    marginTop: 105,
-    fontSize: 38,
-    fontWeight: '800',
-    color: '#000',
-  },
-
-  form: {
-    width: 210,
-    marginTop: 55,
-  },
-
-  label: {
-    fontSize: 11,
+  subtitle: {
+    marginTop: 10,
+    color: UCIColors.textGray,
     fontWeight: '700',
-    color: '#000',
-    marginBottom: 8,
   },
-
-  input: {
-    width: '100%',
-    height: 30,
-    borderWidth: 1,
-    borderColor: '#777',
-    backgroundColor: '#fff',
-    paddingHorizontal: 8,
-    marginBottom: 38,
-    color: '#000',
-  },
-
-  button: {
-    width: 195,
-    height: 62,
-    backgroundColor: '#1f1f1f',
-    alignSelf: 'center',
-    justifyContent: 'center',
+  form: {
+    width: 230,
+    marginTop: 70,
     alignItems: 'center',
-    marginTop: 50,
-  },
-
-  buttonText: {
-    color: '#fff',
-    fontSize: 12,
   },
 });

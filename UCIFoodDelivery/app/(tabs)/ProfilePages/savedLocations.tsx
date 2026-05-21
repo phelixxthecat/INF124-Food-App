@@ -2,26 +2,56 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { appStyles, UCIColors } from '../../../constants/appStyles';
 
-export default function savedLocations() {
+export default function SavedLocations() {
   const router = useRouter();
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>Saved Locations Page</Text>
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>Saved Locations</Text>
 
-      <View style={styles.card}>
-        <Pressable style={styles.backButton} onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={28} color="#000" />
+      <View style={appStyles.card}>
+        <Pressable
+          style={appStyles.backButton}
+          onPress={() => router.back()}
+        >
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color={UCIColors.navy}
+          />
         </Pressable>
 
-        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
-          <Text style={styles.title}>Saved Locations</Text>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={appStyles.logo}>ZotEats</Text>
+          <Text style={appStyles.title}>Saved Locations</Text>
 
-          {[1, 2, 3, 4].map((item) => (
-            <View key={item} style={styles.item}>
-              <Text style={styles.itemTitle}>Location</Text>
-              <View style={styles.greyBox} />
+          {[
+            'Engineering Hall',
+            'Langson Library',
+            'Student Center',
+            'Mesa Court',
+          ].map((location) => (
+            <View key={location} style={styles.locationCard}>
+              <Ionicons
+                name="location"
+                size={24}
+                color={UCIColors.navy}
+              />
+
+              <View style={styles.locationInfo}>
+                <Text style={styles.locationName}>
+                  {location}
+                </Text>
+
+                <Text style={styles.locationSubtext}>
+                  UCI Campus Pickup Spot
+                </Text>
+              </View>
             </View>
           ))}
         </ScrollView>
@@ -31,56 +61,36 @@ export default function savedLocations() {
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    position: 'relative',
-  },
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
   content: {
     alignItems: 'center',
-    paddingTop: 70,
-    paddingBottom: 35,
+    paddingBottom: 40,
   },
-  title: {
-    color: '#000',
-    fontSize: 26,
-    fontWeight: '800',
-    marginBottom: 35,
-  },
-  item: {
-    width: 255,
-    marginBottom: 16,
-  },
-  itemTitle: {
-    color: '#000',
-    fontSize: 11,
-    fontWeight: '700',
-    marginBottom: 5,
-  },
-  greyBox: {
-    width: 255,
-    height: 105,
-    backgroundColor: '#d9d9d9',
+
+  locationCard: {
+    width: 260,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: UCIColors.white,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#999',
+    borderColor: '#ddd',
+    padding: 16,
+    marginBottom: 14,
+  },
+
+  locationInfo: {
+    marginLeft: 14,
+  },
+
+  locationName: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: UCIColors.navy,
+  },
+
+  locationSubtext: {
+    marginTop: 4,
+    fontSize: 12,
+    color: UCIColors.textGray,
   },
 });

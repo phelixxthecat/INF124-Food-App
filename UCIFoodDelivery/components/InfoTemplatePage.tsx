@@ -4,10 +4,12 @@ import {
   Text,
   StyleSheet,
   Pressable,
+  ScrollView,
 } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { appStyles, UCIColors } from '../constants/appStyles';
 
 type InfoPageProps = {
   pageTitle: string;
@@ -23,101 +25,83 @@ export default function InfoTemplatePage({
   const router = useRouter();
 
   return (
-    <View style={styles.screen}>
-      <Text style={styles.pageLabel}>{pageTitle}</Text>
+    <View style={appStyles.screen}>
+      <Text style={appStyles.pageLabel}>{pageTitle}</Text>
 
-      <View style={styles.card}>
-
+      <View style={appStyles.card}>
         {/* BACK BUTTON */}
         <Pressable
-          style={styles.backButton}
+          style={appStyles.backButton}
           onPress={() => router.back()}
         >
-          <Ionicons name="arrow-back" size={28} color="#000" />
+          <Ionicons
+            name="arrow-back"
+            size={24}
+            color={UCIColors.navy}
+          />
         </Pressable>
 
-        <View style={styles.content}>
-          <Text style={styles.logo}>Logo</Text>
+        <ScrollView
+          contentContainerStyle={styles.content}
+          showsVerticalScrollIndicator={false}
+        >
+          <Text style={appStyles.logo}>ZotEats</Text>
 
           <Text style={styles.sectionTitle}>
             {sectionTitle}
           </Text>
 
-          <View style={styles.greyBox}>
+          <View style={styles.infoCard}>
             <Text style={styles.bodyText}>
               {bodyText}
             </Text>
           </View>
-        </View>
+        </ScrollView>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  screen: {
-    flex: 1,
-    backgroundColor: '#1f1f1f',
-    paddingTop: 38,
-    alignItems: 'center',
-  },
-
-  pageLabel: {
-    width: 330,
-    color: '#777',
-    fontSize: 14,
-    marginBottom: 8,
-  },
-
-  card: {
-    width: 330,
-    height: 725,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    position: 'relative',
-  },
-
-  backButton: {
-    position: 'absolute',
-    top: 20,
-    left: 20,
-    zIndex: 10,
-  },
-
   content: {
     alignItems: 'center',
-    paddingTop: 100,
+    paddingTop: 70,
+    paddingBottom: 40,
     width: '100%',
   },
 
-  logo: {
-    fontSize: 38,
-    fontWeight: '800',
-    color: '#000',
-    marginBottom: 50,
-  },
-
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#000',
-    marginBottom: 18,
+    fontSize: 24,
+    fontWeight: '800',
+    color: UCIColors.navy,
+    marginBottom: 20,
+    textAlign: 'center',
   },
 
-  greyBox: {
-    width: 240,
-    minHeight: 180,
-    backgroundColor: '#d9d9d9',
+  infoCard: {
+    width: 260,
+    backgroundColor: UCIColors.cream,
+    borderRadius: 22,
     borderWidth: 1,
-    borderColor: '#999',
-    padding: 18,
-    justifyContent: 'center',
+    borderColor: UCIColors.gold,
+    paddingVertical: 28,
+    paddingHorizontal: 22,
+
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    elevation: 4,
   },
 
   bodyText: {
-    fontSize: 13,
-    color: '#333',
+    fontSize: 14,
+    color: UCIColors.black,
     textAlign: 'center',
-    lineHeight: 22,
+    lineHeight: 24,
+    fontWeight: '500',
   },
 });
