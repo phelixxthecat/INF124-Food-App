@@ -12,7 +12,7 @@ export function PortalHeader() {
   return (
     <View style={[styles.container, { backgroundColor: theme.primaryBlue }]}>
       <View style={styles.brandContainer}>
-        <Text style={[styles.brandName, { fontFamily: Fonts.sans, color: '#FFFFFF' }]}>UCI Eats</Text>
+        <Text style={[styles.brandName, { fontFamily: Fonts.sans, color: '#FFFFFF' }]}>ZotEats</Text>
         <Text style={[styles.portalLabel, { fontFamily: Fonts.serif, color: theme.accentGold }]}>Partner Portal</Text>
       </View>
 
