@@ -1,12 +1,10 @@
-import type { Courier, PickupStation, PortalOrder, WeeklyRevenuePoint } from './types';
-
-export const DASHBOARD_METRICS = {
+const dashboardMetrics = {
   activeOrders: 8,
   todaysRevenue: 425,
   partnerRating: 4.9,
 };
 
-export const INITIAL_ORDERS: PortalOrder[] = [
+const initialOrders = [
   {
     id: '1',
     orderNumber: '#2048',
@@ -53,14 +51,14 @@ export const INITIAL_ORDERS: PortalOrder[] = [
   },
 ];
 
-export const PICKUP_STATIONS: PickupStation[] = [
+const pickupStations = [
   { id: 'ALDRICH HALL', capacity: 85 },
   { id: 'ICS COURTYARD', capacity: 93 },
   { id: 'STUDENT CENTER', capacity: 61 },
   { id: 'LANGSON LIBRARY', capacity: 74 },
 ];
 
-export const WEEKLY_REVENUE: WeeklyRevenuePoint[] = [
+const weeklyRevenue = [
   { day: 'Mon', amount: 280 },
   { day: 'Tue', amount: 335 },
   { day: 'Wed', amount: 315 },
@@ -70,12 +68,12 @@ export const WEEKLY_REVENUE: WeeklyRevenuePoint[] = [
   { day: 'Sun', amount: 305 },
 ];
 
-export const ANALYTICS_SUMMARY = {
+const analyticsSummary = {
   bestSellingItem: "Peter's Poke Bowl",
   peakHour: '12:00 PM',
 };
 
-export const COURIERS: Courier[] = [
+const couriers = [
   {
     id: '1',
     name: 'Avery Park',
@@ -113,3 +111,12 @@ export const COURIERS: Courier[] = [
       'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
   },
 ];
+
+module.exports = {
+  dashboardMetrics,
+  initialOrders,
+  pickupStations,
+  weeklyRevenue,
+  analyticsSummary,
+  couriers,
+};
