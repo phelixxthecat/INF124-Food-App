@@ -1,34 +1,44 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Colors, Fonts } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
+import {
+  fetchPartnerPortalOverview,
+  updatePartnerPortalOrderStatus,
+} from '@/services/partnerPortalApi';
 import { AnalyticsBriefModule } from './AnalyticsBriefModule';
 import { CourierAssignmentModule } from './CourierAssignmentModule';
 import { DashboardOverviewModule } from './DashboardOverviewModule';
 import { LiveOrderManagementModule } from './LiveOrderManagementModule';
-import {
-    ANALYTICS_SUMMARY,
-    COURIERS,
-    DASHBOARD_METRICS,
-    INITIAL_ORDERS,
-    PICKUP_STATIONS,
-    WEEKLY_REVENUE,
-} from './mockData';
 import { PickupStationManagementModule } from './PickupStationManagementModule';
 import { PortalHeader } from './PortalHeader';
-import type { OrderStatus, PortalOrder } from './types';
+import type {
+  AnalyticsSummary,
+  Courier,
+  DashboardMetrics,
+  OrderStatus,
+  PickupStation,
+  PortalOrder,
+  WeeklyRevenuePoint,
+} from './types';
 
 const STATUS_OPTIONS: OrderStatus[] = ['Preparing', 'Ready for Pickup', 'Out for Delivery', 'Delivered'];
 
 export function PartnerPortalScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
+  const [orders, setOrders] = useState<PortalOrder[]>([]);
+  const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetrics | null>(null);
+  const [pickupStations, setPickupStations] = useState<PickupStation[]>([]);
+  const [weeklyRevenue, setWeeklyRevenue] = useState<WeeklyRevenuePoint[]>([]);
+  const [analyticsSummary, setAnalyticsSummary] = useState<AnalyticsSummary | null>(null);
+  const [couriers, setCouriers] = useState<Courier[]>([]);
   const [selectedOrder, setSelectedOrder] = useState<PortalOrder | null>(null);
   const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const selectedOrderStatus = useMemo(() => selectedOrder?.status ?? null, [selectedOrder]);
 
@@ -37,18 +47,75 @@ export function PartnerPortalScreen() {
     setIsStatusModalVisible(true);
   };
 
-  const updateOrderStatus = (status: OrderStatus) => {
+  const updateOrderStatus = async (status: OrderStatus) => {
     if (!selectedOrder) {
       return;
     }
 
-    setOrders((currentOrders) =>
-      currentOrders.map((order) => (order.id === selectedOrder.id ? { ...order, status } : order)),
-    );
-    console.log(`Updated ${selectedOrder.orderNumber} to ${status}`);
+    try {
+      const updatedOrder = await updatePartnerPortalOrderStatus(selectedOrder.id, status);
+      setOrders((currentOrders) =>
+        currentOrders.map((order) => (order.id === updatedOrder.id ? updatedOrder : order)),
+      );
+      console.log(`Updated ${selectedOrder.orderNumber} to ${status}`);
+    } catch (error) {
+      console.log('Failed to update order status', error);
+    }
+
     setIsStatusModalVisible(false);
     setSelectedOrder(null);
   };
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const loadOverview = async () => {
+      setLoadError(null);
+
+      try {
+        const overview = await fetchPartnerPortalOverview();
+        if (!isMounted) {
+          return;
+        }
+
+        setDashboardMetrics(overview.dashboardMetrics);
+        setOrders(overview.orders);
+        setPickupStations(overview.pickupStations);
+        setWeeklyRevenue(overview.weeklyRevenue);
+        setAnalyticsSummary(overview.analyticsSummary);
+        setCouriers(overview.couriers);
+      } catch (error) {
+        if (!isMounted) {
+          return;
+        }
+        setLoadError('Unable to load partner portal data.');
+      } finally {
+        // Loading state is derived from data readiness.
+      }
+    };
+
+    loadOverview();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const isReady = Boolean(dashboardMetrics && analyticsSummary && weeklyRevenue.length);
+
+  if (!isReady) {
+    return (
+      <View style={[styles.screen, { backgroundColor: theme.bgAltGray }]}>
+        <PortalHeader />
+        <View style={styles.loadingState}>
+          <Text style={[styles.loadingText, { color: theme.textPrimary, fontFamily: Fonts.sans }]}>Loading portal data...</Text>
+          {loadError ? (
+            <Text style={[styles.errorText, { color: theme.errorRed, fontFamily: Fonts.sans }]}>{loadError}</Text>
+          ) : null}
+        </View>
+      </View>
+    );
+  }
 
   return (
     <View style={[styles.screen, { backgroundColor: theme.bgAltGray }]}>
@@ -59,22 +126,22 @@ export function PartnerPortalScreen() {
         showsVerticalScrollIndicator={false}
         accessibilityLabel="UCI Eats partner portal screen">
         <DashboardOverviewModule
-          activeOrders={DASHBOARD_METRICS.activeOrders}
-          todaysRevenue={DASHBOARD_METRICS.todaysRevenue}
-          partnerRating={DASHBOARD_METRICS.partnerRating}
+          activeOrders={dashboardMetrics.activeOrders}
+          todaysRevenue={dashboardMetrics.todaysRevenue}
+          partnerRating={dashboardMetrics.partnerRating}
         />
 
         <LiveOrderManagementModule orders={orders} onStatusPress={openStatusModal} />
 
-        <PickupStationManagementModule stations={PICKUP_STATIONS} />
+        <PickupStationManagementModule stations={pickupStations} />
 
         <AnalyticsBriefModule
-          revenueSeries={WEEKLY_REVENUE}
-          bestSellingItem={ANALYTICS_SUMMARY.bestSellingItem}
-          peakHour={ANALYTICS_SUMMARY.peakHour}
+          revenueSeries={weeklyRevenue}
+          bestSellingItem={analyticsSummary.bestSellingItem}
+          peakHour={analyticsSummary.peakHour}
         />
 
-        <CourierAssignmentModule couriers={COURIERS} />
+        <CourierAssignmentModule couriers={couriers} />
       </ScrollView>
 
       <Modal
@@ -186,6 +253,18 @@ const styles = StyleSheet.create({
   },
   modalOptionPressed: {
     opacity: 0.84,
+  },
+  loadingState: {
+    paddingHorizontal: 20,
+    paddingTop: 24,
+    gap: 8,
+  },
+  loadingText: {
+    fontSize: 16,
+    fontWeight: '700',
+  },
+  errorText: {
+    fontSize: 13,
   },
   modalOptionText: {
     flex: 1,

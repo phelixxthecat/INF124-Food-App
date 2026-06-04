@@ -33,3 +33,23 @@ export type WeeklyRevenuePoint = {
   day: string;
   amount: number;
 };
+
+export type DashboardMetrics = {
+  activeOrders: number;
+  todaysRevenue: number;
+  partnerRating: number;
+};
+
+export type AnalyticsSummary = {
+  bestSellingItem: string;
+  peakHour: string;
+};
+
+export type PartnerPortalOverview = {
+  dashboardMetrics: DashboardMetrics;
+  orders: PortalOrder[];
+  pickupStations: PickupStation[];
+  weeklyRevenue: WeeklyRevenuePoint[];
+  analyticsSummary: AnalyticsSummary;
+  couriers: Courier[];
+};
