@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
-import React, { useMemo, useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 import { Colors, Fonts } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
@@ -9,45 +9,79 @@ import { AnalyticsBriefModule } from './AnalyticsBriefModule';
 import { CourierAssignmentModule } from './CourierAssignmentModule';
 import { DashboardOverviewModule } from './DashboardOverviewModule';
 import { LiveOrderManagementModule } from './LiveOrderManagementModule';
-import {
-    ANALYTICS_SUMMARY,
-    COURIERS,
-    DASHBOARD_METRICS,
-    INITIAL_ORDERS,
-    PICKUP_STATIONS,
-    WEEKLY_REVENUE,
-} from './mockData';
-import { PickupStationManagementModule } from './PickupStationManagementModule';
 import { PortalHeader } from './PortalHeader';
-import type { OrderStatus, PortalOrder } from './types';
+import type { OrderStatus, PartnerPortalSnapshot, PortalOrder } from './types';
 
 const STATUS_OPTIONS: OrderStatus[] = ['Preparing', 'Ready for Pickup', 'Out for Delivery', 'Delivered'];
+const API_BASE_URL = 'http://localhost:5000';
 
 export function PartnerPortalScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
-  const [orders, setOrders] = useState(INITIAL_ORDERS);
+  const [portalData, setPortalData] = useState<PartnerPortalSnapshot | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<PortalOrder | null>(null);
   const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
   const selectedOrderStatus = useMemo(() => selectedOrder?.status ?? null, [selectedOrder]);
+
+  useEffect(() => {
+    const fetchPortalData = async () => {
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/partner-portal`);
+
+        if (!response.ok) {
+          throw new Error('Failed to load partner portal data');
+        }
+
+        const data: PartnerPortalSnapshot = await response.json();
+        setPortalData(data);
+        setLoadError(null);
+      } catch (error) {
+        setLoadError('Unable to load partner portal data.');
+        console.error('Failed to fetch partner portal data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPortalData();
+  }, []);
+
+  const orders = portalData?.orders ?? [];
 
   const openStatusModal = (order: PortalOrder) => {
     setSelectedOrder(order);
     setIsStatusModalVisible(true);
   };
 
-  const updateOrderStatus = (status: OrderStatus) => {
+  const updateOrderStatus = async (status: OrderStatus) => {
     if (!selectedOrder) {
       return;
     }
 
-    setOrders((currentOrders) =>
-      currentOrders.map((order) => (order.id === selectedOrder.id ? { ...order, status } : order)),
-    );
-    console.log(`Updated ${selectedOrder.orderNumber} to ${status}`);
-    setIsStatusModalVisible(false);
-    setSelectedOrder(null);
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/partner-portal/orders/${selectedOrder.id}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to update order status');
+      }
+
+      const updatedPortalData: PartnerPortalSnapshot = await response.json();
+      setPortalData(updatedPortalData);
+      console.log(`Updated ${selectedOrder.orderNumber} to ${status}`);
+      setIsStatusModalVisible(false);
+      setSelectedOrder(null);
+    } catch (error) {
+      console.error('Failed to update order status:', error);
+    }
   };
 
   return (
@@ -58,23 +92,34 @@ export function PartnerPortalScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
         accessibilityLabel="UCI Eats partner portal screen">
-        <DashboardOverviewModule
-          activeOrders={DASHBOARD_METRICS.activeOrders}
-          todaysRevenue={DASHBOARD_METRICS.todaysRevenue}
-          partnerRating={DASHBOARD_METRICS.partnerRating}
-        />
+        {isLoading ? (
+          <View style={[styles.loadingState, { backgroundColor: theme.bgClean, borderColor: theme.borderLight }]}>
+            <ActivityIndicator size="large" color={theme.primaryBlue} />
+            <Text style={[styles.loadingText, { color: theme.textSecondary, fontFamily: Fonts.sans }]}>Loading partner portal...</Text>
+          </View>
+        ) : loadError ? (
+          <View style={[styles.loadingState, { backgroundColor: theme.bgClean, borderColor: theme.borderLight }]}>
+            <Text style={[styles.loadingText, { color: theme.errorRed, fontFamily: Fonts.sans }]}>{loadError}</Text>
+          </View>
+        ) : portalData ? (
+          <>
+            <DashboardOverviewModule
+              activeOrders={portalData.dashboardMetrics.activeOrders}
+              todaysRevenue={portalData.dashboardMetrics.todaysRevenue}
+              partnerRating={portalData.dashboardMetrics.partnerRating}
+            />
 
-        <LiveOrderManagementModule orders={orders} onStatusPress={openStatusModal} />
+            <LiveOrderManagementModule orders={orders} onStatusPress={openStatusModal} />
 
-        <PickupStationManagementModule stations={PICKUP_STATIONS} />
+            <AnalyticsBriefModule
+              revenueSeries={portalData.weeklyRevenue}
+              bestSellingItem={portalData.analyticsSummary.bestSellingItem}
+              peakHour={portalData.analyticsSummary.peakHour}
+            />
 
-        <AnalyticsBriefModule
-          revenueSeries={WEEKLY_REVENUE}
-          bestSellingItem={ANALYTICS_SUMMARY.bestSellingItem}
-          peakHour={ANALYTICS_SUMMARY.peakHour}
-        />
-
-        <CourierAssignmentModule couriers={COURIERS} />
+            <CourierAssignmentModule couriers={portalData.couriers} />
+          </>
+        ) : null}
       </ScrollView>
 
       <Modal
@@ -146,6 +191,20 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 16,
     paddingBottom: 28,
+  },
+  loadingState: {
+    minHeight: 220,
+    borderWidth: 1,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    padding: 20,
+  },
+  loadingText: {
+    fontSize: 14,
+    fontWeight: '700',
+    textAlign: 'center',
   },
   modalBackdrop: {
     flex: 1,

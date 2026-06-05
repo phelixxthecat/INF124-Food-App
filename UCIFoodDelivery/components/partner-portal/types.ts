@@ -13,11 +13,6 @@ export type PortalOrder = {
   thumbnailUri: string;
 };
 
-export type PickupStation = {
-  id: string;
-  capacity: number;
-};
-
 export type CourierStatus = 'Available' | 'Busy' | 'In Transit' | 'On Break';
 
 export type Courier = {
@@ -32,4 +27,19 @@ export type Courier = {
 export type WeeklyRevenuePoint = {
   day: string;
   amount: number;
+};
+
+export type PartnerPortalSnapshot = {
+  dashboardMetrics: {
+    activeOrders: number;
+    todaysRevenue: number;
+    partnerRating: number;
+  };
+  analyticsSummary: {
+    bestSellingItem: string;
+    peakHour: string;
+  };
+  orders: PortalOrder[];
+  couriers: Courier[];
+  weeklyRevenue: WeeklyRevenuePoint[];
 };
