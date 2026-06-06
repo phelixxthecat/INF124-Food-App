@@ -1,5 +1,6 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
 import React from 'react';
+import { useRouter } from 'expo-router';
 import {
   Alert,
   Keyboard,
@@ -30,6 +31,7 @@ type CheckoutCart = {
 };
 
 export default function Checkout() {
+  const router = useRouter();
   const [text, onChangeText] = React.useState('');
   const [cart, setCart] = React.useState<CheckoutCart | null>(null);
   const [placingOrder, setPlacingOrder] = React.useState(false);
@@ -159,7 +161,28 @@ export default function Checkout() {
           <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
             <ScrollView contentContainerStyle={styles.content}>
               <Text style={appStyles.title}>Checkout</Text>
-
+              <Pressable
+                style={appStyles.backButton}
+                onPress={() => {
+                  if (cart) {
+                    router.push({
+                      pathname: '/food',
+                      params: {
+                        restaurantId: cart.restaurantId,
+                        restaurantName: cart.restaurantName,
+                      },
+                    })}
+                  else {
+                    router.push('/home')
+                  }
+                }}
+              >
+                <Ionicons
+                  name="arrow-back"
+                  size={24}
+                  color={UCIColors.navy}
+                />
+              </Pressable>
               <View style={styles.pickupCard}>
                 <Text style={styles.sectionLabel}>Pick up at</Text>
                 <View style={styles.row}>

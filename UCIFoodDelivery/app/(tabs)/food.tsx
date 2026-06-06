@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -167,8 +168,17 @@ export default function FoodPage() {
 
       <View style={appStyles.card}>
         <ScrollView contentContainerStyle={styles.content}>
+          <Pressable
+            style={appStyles.backButton}
+            onPress={() => router.navigate('/home')}
+          >
+            <Ionicons
+              name="arrow-back"
+              size={24}
+              color={UCIColors.navy}
+            />
+          </Pressable>
           <Text style={appStyles.logo}>ZotEats</Text>
-
           <Text style={appStyles.title}>
             {selectedRestaurant?.restaurantName ?? 'Food Delivery'}
           </Text>
