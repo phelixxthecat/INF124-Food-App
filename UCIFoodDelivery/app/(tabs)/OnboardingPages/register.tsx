@@ -43,7 +43,7 @@ export default function RegisterPage() {
     const result = await userAuthentication.register(name, email, password);
     if (result.success) {
       Alert.alert('Success', 'Account created successfully!');
-      router.push('/home');
+      router.replace('/home');
       
       if (result.user) {
         await updateProfile(result.user, {
