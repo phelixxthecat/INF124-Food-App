@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -7,11 +8,29 @@ import { getSessionJSON, SESSION_KEYS, setSessionJSON } from '../../src/sessionS
 type MenuItem = {
   _id: string;
   restaurantId: string;
+=======
+import React, { useEffect, useState } from 'react';
+import {
+  View,
+  Text,
+  Pressable,
+  StyleSheet,
+  ScrollView,
+  ActivityIndicator,
+} from 'react-native';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { appStyles, UCIColors } from '../../constants/appStyles';
+import { useCart } from '../context/CartContext';
+
+type MenuItem = {
+  _id: string;
+>>>>>>> Stashed changes
   name: string;
   description?: string;
   price: number;
   category?: string;
 };
+<<<<<<< Updated upstream
 
 type SelectedRestaurant = {
   restaurantId: string;
@@ -86,10 +105,45 @@ export default function FoodPage() {
     } catch (fetchError) {
       console.error('Failed to fetch menu:', fetchError);
       setError('Unable to load the menu right now.');
+=======
+
+export default function FoodPage() {
+  const router = useRouter();
+  const { restaurantId, restaurantName } = useLocalSearchParams();
+
+  const { cartItems, addToCart } = useCart();
+
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const cartCount = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0
+  );
+
+  useEffect(() => {
+    fetchMenuItems();
+  }, [restaurantId]);
+
+  const fetchMenuItems = async () => {
+    try {
+      if (!restaurantId) return;
+
+      const response = await fetch(
+        `http://localhost:5000/api/menu/restaurant/${restaurantId}`
+      );
+
+      const data = await response.json();
+
+      setMenuItems(data);
+    } catch (error) {
+      console.error('Failed to fetch menu:', error);
+>>>>>>> Stashed changes
     } finally {
       setLoading(false);
     }
   };
+<<<<<<< Updated upstream
 
   const addToCart = (menuItemId: string) => {
     setCart((prev) => ({
@@ -142,6 +196,8 @@ export default function FoodPage() {
   };
 
   const formatPrice = (price: number) => `$${price.toFixed(2)}`;
+=======
+>>>>>>> Stashed changes
 
   return (
     <View style={appStyles.screen}>
@@ -150,14 +206,24 @@ export default function FoodPage() {
       <View style={appStyles.card}>
         <ScrollView contentContainerStyle={styles.content}>
           <Text style={appStyles.logo}>ZotEats</Text>
+<<<<<<< Updated upstream
           <Text style={appStyles.title}>{selectedRestaurant?.restaurantName ?? 'Food Delivery'}</Text>
+=======
+
+          <Text style={appStyles.title}>
+            {restaurantName || 'Restaurant Menu'}
+          </Text>
+>>>>>>> Stashed changes
 
           <View style={styles.cartPill}>
-            <Text style={styles.cartText}>Cart: {cartCount}</Text>
+            <Text style={styles.cartText}>
+              Cart: {cartCount}
+            </Text>
           </View>
 
           {loading ? (
             <View style={styles.loadingContainer}>
+<<<<<<< Updated upstream
               <ActivityIndicator size="large" color={UCIColors.navy} />
               <Text style={styles.loadingText}>Loading menu items...</Text>
             </View>
@@ -210,8 +276,80 @@ export default function FoodPage() {
             style={[appStyles.primaryButton, cartCount === 0 && styles.checkoutDisabled]}
             onPress={goToCheckout}
             disabled={cartCount === 0}
+=======
+              <ActivityIndicator
+                size="large"
+                color={UCIColors.navy}
+              />
+              <Text style={styles.loadingText}>
+                Loading menu...
+              </Text>
+            </View>
+          ) : menuItems.length === 0 ? (
+            <Text style={styles.emptyText}>
+              No menu items available.
+            </Text>
+          ) : (
+            menuItems.map((item) => (
+              <View key={item._id} style={styles.foodCard}>
+                <View style={styles.foodImage}>
+                  <Text style={styles.foodImageLetter}>
+                    {item.name.charAt(0)}
+                  </Text>
+                </View>
+
+                <View style={styles.foodInfo}>
+                  <Text style={styles.foodName}>
+                    {item.name}
+                  </Text>
+
+                  {item.category ? (
+                    <Text style={styles.foodCategory}>
+                      {item.category}
+                    </Text>
+                  ) : null}
+
+                  {item.description ? (
+                    <Text style={styles.foodDescription}>
+                      {item.description}
+                    </Text>
+                  ) : null}
+
+                  <Text style={styles.foodPrice}>
+                    ${item.price.toFixed(2)}
+                  </Text>
+
+                  <Pressable
+                    style={styles.addButton}
+                    onPress={() =>
+                      addToCart({
+                        _id: item._id,
+                        name: item.name,
+                        description: item.description,
+                        price: item.price,
+                        category: item.category,
+                      })
+                    }
+                  >
+                    <Text style={styles.addButtonText}>
+                      Add to Cart
+                    </Text>
+                  </Pressable>
+                </View>
+              </View>
+            ))
+          )}
+
+          <Pressable
+            style={appStyles.primaryButton}
+            onPress={() =>
+              router.push('/Checkout' as any)
+            }
+>>>>>>> Stashed changes
           >
-            <Text style={appStyles.primaryButtonText}>Go to Checkout</Text>
+            <Text style={appStyles.primaryButtonText}>
+              Go to Checkout
+            </Text>
           </Pressable>
         </ScrollView>
       </View>
@@ -261,8 +399,26 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 
+  loadingContainer: {
+    alignItems: 'center',
+    marginTop: 30,
+  },
+
+  loadingText: {
+    marginTop: 10,
+    color: UCIColors.textGray,
+    fontWeight: '700',
+  },
+
+  emptyText: {
+    color: UCIColors.textGray,
+    marginTop: 20,
+    marginBottom: 20,
+    fontWeight: '700',
+  },
+
   foodCard: {
-    width: 270,
+    width: 300,
     flexDirection: 'row',
     backgroundColor: UCIColors.white,
     borderRadius: 20,
@@ -276,7 +432,17 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 16,
-    backgroundColor: UCIColors.gray,
+    backgroundColor: UCIColors.cream,
+    borderWidth: 1,
+    borderColor: UCIColors.gold,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  foodImageLetter: {
+    color: UCIColors.navy,
+    fontSize: 30,
+    fontWeight: '900',
   },
 
   foodInfo: {
@@ -290,10 +456,25 @@ const styles = StyleSheet.create({
     color: UCIColors.navy,
   },
 
+  foodCategory: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: UCIColors.gold,
+    marginTop: 3,
+  },
+
+  foodDescription: {
+    fontSize: 12,
+    color: UCIColors.textGray,
+    marginTop: 5,
+    marginBottom: 6,
+  },
+
   foodPrice: {
     fontSize: 14,
     fontWeight: '700',
     color: UCIColors.textGray,
+<<<<<<< Updated upstream
     marginTop: 4,
     marginBottom: 6,
   },
@@ -306,6 +487,9 @@ const styles = StyleSheet.create({
 
   cartActions: {
     gap: 8,
+=======
+    marginBottom: 12,
+>>>>>>> Stashed changes
   },
 
   addButton: {

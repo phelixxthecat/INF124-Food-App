@@ -23,7 +23,7 @@ export default function LandingPage() {
             <Text style={appStyles.secondaryButtonText}>Register</Text>
           </Pressable>
 
-          <Pressable style={appStyles.outlineButton} onPress={() => router.push('/food')}>
+          <Pressable style={appStyles.outlineButton} onPress={() => router.push('/home')}>
             <Text style={appStyles.outlineButtonText}>Browse as Guest</Text>
           </Pressable>
         </View>

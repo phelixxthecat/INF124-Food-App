@@ -2,6 +2,7 @@ import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { CartProvider } from './context/CartContext';
 import 'react-native-reanimated';
 
 import { HeptaSlab_400Regular, HeptaSlab_700Bold } from '@expo-google-fonts/hepta-slab';
@@ -28,6 +29,7 @@ export default function RootLayout() {
     'Hepta Slab': HeptaSlab_400Regular,
     'Hepta Slab Bold': HeptaSlab_700Bold,
   });
+
   const colorScheme = useColorScheme();
 
   if (!fontsLoaded) {
@@ -46,11 +48,17 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={navigationTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
+      <CartProvider>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen
+            name="modal"
+            options={{ presentation: 'modal', title: 'Modal' }}
+          />
+        </Stack>
+
+        <StatusBar style="auto" />
+      </CartProvider>
     </ThemeProvider>
   );
 }
