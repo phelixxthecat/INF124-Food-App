@@ -35,6 +35,23 @@ const orderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    customer: {
+      type: String,
+      default: 'Guest Customer',
+    },
+    campusLocation: {
+      type: String,
+      default: 'UCI Campus',
+    },
+    destinationType: {
+      type: String,
+      enum: ['Campus Pickup', 'Classroom'],
+      default: 'Campus Pickup',
+    },
+    thumbnailUri: {
+      type: String,
+      default: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=200&q=80',
+    },
     items: {
       type: [orderItemSchema],
       required: true,
@@ -61,8 +78,8 @@ const orderSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["Placed", "Preparing", "Ready for Pickup", "Out for Delivery", "Delivered"],
-      default: "Placed",
+      enum: ["Preparing", "Ready for Pickup", "Out for Delivery", "Delivered"],
+      default: "Preparing",
     },
   },
   { timestamps: true }

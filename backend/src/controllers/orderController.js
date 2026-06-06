@@ -4,7 +4,15 @@ const Order = require("../models/Order");
 
 const placeOrder = async (req, res) => {
   try {
-    const { restaurantId, restaurantName, items } = req.body;
+    const {
+      restaurantId,
+      restaurantName,
+      items,
+      customer,
+      campusLocation,
+      destinationType,
+      thumbnailUri,
+    } = req.body;
 
     if (!restaurantId || !restaurantName || !Array.isArray(items) || items.length === 0) {
       return res.status(400).json({ message: "restaurantId, restaurantName, and items are required" });
@@ -43,6 +51,10 @@ const placeOrder = async (req, res) => {
     const order = await Order.create({
       restaurantId,
       restaurantName,
+      customer,
+      campusLocation,
+      destinationType,
+      thumbnailUri,
       items: normalizedItems,
       subtotal,
       tax,

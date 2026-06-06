@@ -5,6 +5,7 @@ export type OrderDestinationType = 'Campus Pickup' | 'Classroom';
 export type PortalOrder = {
   id: string;
   orderNumber: string;
+  restaurantName: string;
   items: string;
   customer: string;
   campusLocation: string;
