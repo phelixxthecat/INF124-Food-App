@@ -1,11 +1,25 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { appStyles, UCIColors } from '../../../constants/appStyles';
+import userAuthentication from '@/src/userAuthentication';
+import { auth } from '@/src/firebase';
 
 export default function ProfilePage() {
   const router = useRouter();
+  let user = auth.currentUser;
+
+  const handleLogout = async () => {
+    const result = await userAuthentication.logout();
+    if (result.success) {
+      user = null;
+      router.replace('/OnboardingPages/onboarding');
+    } else {
+      Alert.alert('Unable to logout', result.error);
+
+    }
+  }
 
   const buttons = [
     {
@@ -50,52 +64,72 @@ export default function ProfilePage() {
           />
         </Pressable>
 
-        <View style={styles.profileSection}>
-          <View style={styles.profilePic} />
+        <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
+          <View style={styles.profileSection}>
+            <View style={styles.profilePic} />
 
-          <Text style={styles.name}>
-            Anteater User
-          </Text>
+            <Text style={styles.name}>
+              {user?.displayName || 'Anteater User'}
+            </Text>
 
-          <Text style={styles.email}>
-            student@uci.edu
-          </Text>
-        </View>
+            <Text style={styles.email}>
+              {user?.email || 'student@uci.edu'}
+            </Text>
+          </View>
 
-        <View style={styles.buttonGroup}>
-          {buttons.map((button) => (
+          <View style={styles.buttonGroup}>
+            {buttons.map((button) => (
+              <Pressable
+                key={button.title}
+                style={styles.button}
+                onPress={() => router.push(button.route as any)}
+              >
+                <Text style={styles.buttonText}>
+                  {button.title}
+                </Text>
+
+                <Ionicons
+                  name="chevron-forward"
+                  size={18}
+                  color={UCIColors.white}
+                />
+              </Pressable>
+            ))}
             <Pressable
-              key={button.title}
-              style={styles.button}
-              onPress={() => router.push(button.route as any)}
-            >
-              <Text style={styles.buttonText}>
-                {button.title}
-              </Text>
+                key="Log Out"
+                style={styles.button_logout}
+                onPress={handleLogout}
+              >
+                <Text style={styles.buttonText_logout}>Log Out</Text>
 
-              <Ionicons
-                name="chevron-forward"
-                size={18}
-                color={UCIColors.white}
-              />
-            </Pressable>
-          ))}
-        </View>
+                <Ionicons
+                  name="chevron-forward"
+                  size={18}
+                  color={UCIColors.navy}
+                />
+              </Pressable>
+          </View>
+        </ScrollView>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  content: {
+    alignItems: 'center',
+    paddingTop: 10,
+    paddingBottom: 40,
+  },
   profileSection: {
     alignItems: 'center',
-    marginTop: 70,
+    marginTop: 60,
     marginBottom: 35,
   },
 
   profilePic: {
-    width: 120,
-    height: 120,
+    width: 100,
+    height: 100,
     borderRadius: 60,
     backgroundColor: UCIColors.gray,
     borderWidth: 4,
@@ -124,8 +158,19 @@ const styles = StyleSheet.create({
 
   button: {
     width: 240,
-    height: 52,
+    height: 50,
     backgroundColor: UCIColors.navy,
+    borderRadius: 18,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+  },
+
+  button_logout: {
+    width: 240,
+    height: 50,
+    backgroundColor: UCIColors.gray,
     borderRadius: 18,
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -135,6 +180,12 @@ const styles = StyleSheet.create({
 
   buttonText: {
     color: UCIColors.white,
+    fontSize: 14,
+    fontWeight: '800',
+  },
+
+  buttonText_logout: {
+    color: UCIColors.navy,
     fontSize: 14,
     fontWeight: '800',
   },
