@@ -1,9 +1,8 @@
 import { Feather, Ionicons } from '@expo/vector-icons';
-import React from 'react';
 import { useRouter } from 'expo-router';
+import React from 'react';
 import {
   Alert,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -11,8 +10,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableWithoutFeedback,
-  View,
+  View
 } from 'react-native';
 import { appStyles, UCIColors } from '../../constants/appStyles';
 import { getSessionJSON, removeSessionKey, SESSION_KEYS } from '../../src/sessionStore';
@@ -117,7 +115,7 @@ export default function Checkout() {
     try {
       setPlacingOrder(true);
 
-      const response = await fetch('http://18.222.199.221:5000//api/orders', {
+      const response = await fetch('http://18.222.199.221:5000/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
