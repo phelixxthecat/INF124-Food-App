@@ -158,152 +158,150 @@ export default function Checkout() {
           behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
           style={{ flex: 1, width: '100%' }}
         >
-          <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-            <ScrollView contentContainerStyle={styles.content}>
-              <Text style={appStyles.title}>Checkout</Text>
-              <Pressable
-                style={appStyles.backButton}
-                onPress={() => {
-                  if (cart) {
-                    router.push({
-                      pathname: '/food',
-                      params: {
-                        restaurantId: cart.restaurantId,
-                        restaurantName: cart.restaurantName,
-                      },
-                    })}
-                  else {
-                    router.push('/home')
-                  }
-                }}
-              >
-                <Ionicons
-                  name="arrow-back"
-                  size={24}
-                  color={UCIColors.navy}
-                />
-              </Pressable>
-              <View style={styles.pickupCard}>
-                <Text style={styles.sectionLabel}>Pick up at</Text>
-                <View style={styles.row}>
-                  <Feather name="map-pin" size={18} color={UCIColors.navy} />
-                  <Text style={styles.address}>123 UCI Address</Text>
-                </View>
+          <ScrollView contentContainerStyle={styles.content}>
+            <Text style={appStyles.title}>Checkout</Text>
+            <Pressable
+              style={appStyles.backButton}
+              onPress={() => {
+                if (cart) {
+                  router.push({
+                    pathname: '/food',
+                    params: {
+                      restaurantId: cart.restaurantId,
+                      restaurantName: cart.restaurantName,
+                    },
+                  })}
+                else {
+                  router.push('/home')
+                }
+              }}
+            >
+              <Ionicons
+                name="arrow-back"
+                size={24}
+                color={UCIColors.navy}
+              />
+            </Pressable>
+            <View style={styles.pickupCard}>
+              <Text style={styles.sectionLabel}>Pick up at</Text>
+              <View style={styles.row}>
+                <Feather name="map-pin" size={18} color={UCIColors.navy} />
+                <Text style={styles.address}>123 UCI Address</Text>
               </View>
+            </View>
 
-              <Text style={styles.heading}>Cart</Text>
+            <Text style={styles.heading}>Cart</Text>
 
-              <Text style={styles.restaurant}>
-                {cart?.restaurantName ?? 'No restaurant selected'}
-              </Text>
+            <Text style={styles.restaurant}>
+              {cart?.restaurantName ?? 'No restaurant selected'}
+            </Text>
 
-              {cart && cart.items.length > 0 ? (
-                cart.items.map((item) => (
-                  <View key={item.menuItemId} style={styles.itemCard}>
-                    <View style={styles.itemImage}>
-                      <Text style={styles.itemImageText}>
-                        {item.name.charAt(0)}
-                      </Text>
-                    </View>
+            {cart && cart.items.length > 0 ? (
+              cart.items.map((item) => (
+                <View key={item.menuItemId} style={styles.itemCard}>
+                  <View style={styles.itemImage}>
+                    <Text style={styles.itemImageText}>
+                      {item.name.charAt(0)}
+                    </Text>
+                  </View>
 
-                    <View style={styles.itemInfo}>
-                      <Text style={styles.itemName}>{item.name}</Text>
+                  <View style={styles.itemInfo}>
+                    <Text style={styles.itemName}>{item.name}</Text>
 
-                      <Text style={styles.description}>
-                        {formatPrice(item.price)} each
-                      </Text>
+                    <Text style={styles.description}>
+                      {formatPrice(item.price)} each
+                    </Text>
 
-                      <View style={styles.quantityRow}>
-                        <Pressable onPress={() => decreaseItem(item.menuItemId)}>
-                          <Feather
-                            name="minus-circle"
-                            size={26}
-                            color={UCIColors.navy}
-                          />
-                        </Pressable>
+                    <View style={styles.quantityRow}>
+                      <Pressable onPress={() => decreaseItem(item.menuItemId)}>
+                        <Feather
+                          name="minus-circle"
+                          size={26}
+                          color={UCIColors.navy}
+                        />
+                      </Pressable>
 
-                        <Text style={styles.quantity}>{item.quantity}</Text>
+                      <Text style={styles.quantity}>{item.quantity}</Text>
 
-                        <Pressable onPress={() => increaseItem(item.menuItemId)}>
-                          <Feather
-                            name="plus-circle"
-                            size={26}
-                            color={UCIColors.navy}
-                          />
-                        </Pressable>
-                      </View>
+                      <Pressable onPress={() => increaseItem(item.menuItemId)}>
+                        <Feather
+                          name="plus-circle"
+                          size={26}
+                          color={UCIColors.navy}
+                        />
+                      </Pressable>
                     </View>
                   </View>
-                ))
-              ) : (
-                <View style={styles.emptyCard}>
-                  <Text style={styles.emptyText}>
-                    No items found in checkout cart.
-                  </Text>
                 </View>
-              )}
-
-              {cart && cart.items.length > 0 ? (
-                <View style={styles.divider} />
-              ) : null}
-
-              <Text style={styles.heading}>Summary</Text>
-
-              <View style={styles.couponBox}>
-                <Ionicons
-                  name="pricetag-outline"
-                  size={22}
-                  color={UCIColors.navy}
-                />
-
-                <TextInput
-                  style={styles.couponInput}
-                  placeholder="Apply Coupon"
-                  placeholderTextColor={UCIColors.textGray}
-                  onChangeText={onChangeText}
-                  value={text}
-                />
-              </View>
-
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryText}>Subtotal</Text>
-                <Text style={styles.summaryText}>{formatPrice(subtotal)}</Text>
-              </View>
-
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryText}>Tax</Text>
-                <Text style={styles.summaryText}>{formatPrice(tax)}</Text>
-              </View>
-
-              <View style={styles.summaryRow}>
-                <Text style={styles.summaryText}>Delivery</Text>
-                <Text style={styles.summaryText}>
-                  {formatPrice(deliveryFee)}
+              ))
+            ) : (
+              <View style={styles.emptyCard}>
+                <Text style={styles.emptyText}>
+                  No items found in checkout cart.
                 </Text>
               </View>
+            )}
 
-              <View style={styles.dashedDivider} />
+            {cart && cart.items.length > 0 ? (
+              <View style={styles.divider} />
+            ) : null}
 
-              <View style={styles.summaryRow}>
-                <Text style={styles.totalText}>Total</Text>
-                <Text style={styles.totalText}>{formatPrice(total)}</Text>
-              </View>
+            <Text style={styles.heading}>Summary</Text>
 
-              <Pressable
-                style={[
-                  appStyles.primaryButton,
-                  (!cart || cart.items.length === 0 || placingOrder) &&
-                    styles.buttonDisabled,
-                ]}
-                onPress={placeOrder}
-                disabled={!cart || cart.items.length === 0 || placingOrder}
-              >
-                <Text style={appStyles.primaryButtonText}>
-                  {placingOrder ? 'Placing...' : 'Place Order'}
-                </Text>
-              </Pressable>
-            </ScrollView>
-          </TouchableWithoutFeedback>
+            <View style={styles.couponBox}>
+              <Ionicons
+                name="pricetag-outline"
+                size={22}
+                color={UCIColors.navy}
+              />
+
+              <TextInput
+                style={styles.couponInput}
+                placeholder="Apply Coupon"
+                placeholderTextColor={UCIColors.textGray}
+                onChangeText={onChangeText}
+                value={text}
+              />
+            </View>
+
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryText}>Subtotal</Text>
+              <Text style={styles.summaryText}>{formatPrice(subtotal)}</Text>
+            </View>
+
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryText}>Tax</Text>
+              <Text style={styles.summaryText}>{formatPrice(tax)}</Text>
+            </View>
+
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryText}>Delivery</Text>
+              <Text style={styles.summaryText}>
+                {formatPrice(deliveryFee)}
+              </Text>
+            </View>
+
+            <View style={styles.dashedDivider} />
+
+            <View style={styles.summaryRow}>
+              <Text style={styles.totalText}>Total</Text>
+              <Text style={styles.totalText}>{formatPrice(total)}</Text>
+            </View>
+
+            <Pressable
+              style={[
+                appStyles.primaryButton,
+                (!cart || cart.items.length === 0 || placingOrder) &&
+                  styles.buttonDisabled,
+              ]}
+              onPress={placeOrder}
+              disabled={!cart || cart.items.length === 0 || placingOrder}
+            >
+              <Text style={appStyles.primaryButtonText}>
+                {placingOrder ? 'Placing...' : 'Place Order'}
+              </Text>
+            </Pressable>
+          </ScrollView>
         </KeyboardAvoidingView>
       </View>
     </View>
