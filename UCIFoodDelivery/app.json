@@ -23,7 +23,18 @@
     },
     "web": {
       "output": "static",
-      "favicon": "./assets/images/favicon.png"
+      "favicon": "./assets/images/favicon.png",
+      "build": {
+        "head": [
+          {
+            "tagName": "link",
+            "attributes": {
+              "rel": "stylesheet",
+              "href": "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800&family=Hepta+Slab:wght@400;700&display=swap"
+            }
+          }
+        ]
+      }
     },
     "plugins": [
       "expo-router",
