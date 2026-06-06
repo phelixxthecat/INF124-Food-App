@@ -35,16 +35,8 @@ export default function ProfilePage() {
       route: '/ProfilePages/savedLocations',
     },
     {
-      title: 'Notifications',
-      route: '/home',
-    },
-    {
-      title: 'Payment',
-      route: '/home',
-    },
-    {
-      title: 'Help & Support',
-      route: '/home',
+      title: 'Settings',
+      route: '/ProfilePages/settings',
     },
   ];
 
@@ -55,7 +47,7 @@ export default function ProfilePage() {
       <View style={appStyles.card}>
         <Pressable
           style={appStyles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.navigate('/home')}
         >
           <Ionicons
             name="arrow-back"
@@ -82,7 +74,7 @@ export default function ProfilePage() {
               <Pressable
                 key={button.title}
                 style={styles.button}
-                onPress={() => router.push(button.route as any)}
+                onPress={() => router.navigate(button.route as any)}
               >
                 <Text style={styles.buttonText}>
                   {button.title}
@@ -118,7 +110,7 @@ export default function ProfilePage() {
 const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: 20,
     paddingBottom: 40,
   },
   profileSection: {
