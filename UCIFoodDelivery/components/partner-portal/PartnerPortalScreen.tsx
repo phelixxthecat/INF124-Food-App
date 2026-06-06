@@ -35,7 +35,7 @@ export function PartnerPortalScreen() {
           throw new Error('Failed to load partner portal data');
         }
 
-        const data: PartnerPortalSnapshot = await response.json();
+       const data: PartnerPortalSnapshot = await response.json();
         setPortalData(data);
         setLoadError(null);
       } catch (error) {
@@ -104,9 +104,9 @@ export function PartnerPortalScreen() {
         ) : portalData ? (
           <>
             <DashboardOverviewModule
-              activeOrders={portalData.dashboardMetrics.activeOrders}
-              todaysRevenue={portalData.dashboardMetrics.todaysRevenue}
-              partnerRating={portalData.dashboardMetrics.partnerRating}
+            activeOrders={portalData.dashboardMetrics.activeOrders}
+            todaysRevenue={portalData.dashboardMetrics.todaysRevenue}
+            partnerRating={portalData.dashboardMetrics.partnerRating}
             />
 
             <LiveOrderManagementModule orders={orders} onStatusPress={openStatusModal} />

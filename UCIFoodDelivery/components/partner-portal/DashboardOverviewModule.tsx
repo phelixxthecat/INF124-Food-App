@@ -52,8 +52,13 @@ function MetricCard({ label, value, detail, iconName, highlight, onPress }: Metr
   );
 }
 
-export function DashboardOverviewModule({ activeOrders, todaysRevenue, partnerRating }: DashboardOverviewModuleProps) {
-  const colorScheme = useColorScheme() ?? 'light';
+export function DashboardOverviewModule({
+  activeOrders,
+  todaysRevenue,
+  partnerRating,
+}: DashboardOverviewModuleProps) {
+
+const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
 
   return (
@@ -79,7 +84,7 @@ export function DashboardOverviewModule({ activeOrders, todaysRevenue, partnerRa
           detail="Gold customer feedback"
           iconName="star"
           highlight
-          onPress={() => console.log('Partner Rating card pressed')}
+          onPress={() => console.log('Partner Rating card pressed')}   
         />
       </View>
     </View>
