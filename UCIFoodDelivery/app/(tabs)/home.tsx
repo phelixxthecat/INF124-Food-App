@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import {
+    ActivityIndicator,
+    Pressable,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from 'react-native';
 import { appStyles, UCIColors } from '../../constants/appStyles';
+import { removeSessionKey, SESSION_KEYS, setSessionJSON } from '../../src/sessionStore';
 
 type Restaurant = {
   _id: string;
@@ -18,6 +19,11 @@ type Restaurant = {
   cuisine?: string;
   location?: string;
   rating?: number;
+};
+
+type SelectedRestaurant = {
+  restaurantId: string;
+  restaurantName: string;
 };
 
 export default function HomePage() {
@@ -63,6 +69,15 @@ export default function HomePage() {
   };
 
   const openRestaurant = (restaurant: Restaurant) => {
+    const selectedRestaurant: SelectedRestaurant = {
+      restaurantId: restaurant._id,
+      restaurantName: restaurant.name,
+    };
+
+    setSessionJSON(SESSION_KEYS.selectedRestaurant, selectedRestaurant);
+    removeSessionKey(SESSION_KEYS.restaurantMenu);
+    removeSessionKey(SESSION_KEYS.checkoutCart);
+
     router.push({
       pathname: '/food',
       params: {
