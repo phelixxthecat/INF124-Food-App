@@ -13,7 +13,7 @@ import { PortalHeader } from './PortalHeader';
 import type { OrderStatus, PartnerPortalSnapshot, PortalOrder } from './types';
 
 const STATUS_OPTIONS: OrderStatus[] = ['Preparing', 'Ready for Pickup', 'Out for Delivery', 'Delivered'];
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'http://18.222.199.221:5000/';
 
 export function PartnerPortalScreen() {
   const colorScheme = useColorScheme() ?? 'light';

@@ -2,12 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Pressable,
-    ScrollView,
-    StyleSheet,
-    Text,
-    View,
+  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
 } from 'react-native';
 import { appStyles, UCIColors } from '../../constants/appStyles';
 import { removeSessionKey, SESSION_KEYS, setSessionJSON } from '../../src/sessionStore';
@@ -55,7 +55,7 @@ export default function HomePage() {
   const fetchRestaurants = async () => {
     try {
       const response = await fetch(
-        'http://localhost:5000/api/restaurants'
+        'http://18.222.199.221:5000//api/restaurants'
       );
 
       const data = await response.json();
