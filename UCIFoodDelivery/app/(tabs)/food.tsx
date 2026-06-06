@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, Pressable, StyleSheet, ScrollView, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 import { appStyles, UCIColors } from '../../constants/appStyles';
 
@@ -21,12 +21,12 @@ export default function FoodPage() {
           </View>
 
           {[
-            { name: 'Anteater Burger', price: '$8' },
-            { name: 'UCI Pizza', price: '$12' },
-            { name: 'Zot Fries', price: '$5' },
+            { name: 'Anteater Burger', price: '$8', image: require('../../assets/images/burger.jpg')},
+            { name: 'UCI Pizza', price: '$12', image: require('../../assets/images/pizza.jpg')},
+            { name: 'Zot Fries', price: '$5', image: require('../../assets/images/fries.jpg')},
           ].map((item) => (
             <View key={item.name} style={styles.foodCard}>
-              <View style={styles.foodImage} />
+              <Image source={item.image} style={styles.foodImage}></Image>
 
               <View style={styles.foodInfo}>
                 <Text style={styles.foodName}>{item.name}</Text>
