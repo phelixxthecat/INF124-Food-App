@@ -1,8 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Pressable, StyleSheet, ScrollView, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { appStyles, UCIColors } from '../../../constants/appStyles';
+import { userAuthentication } from '@/src/userAuthentication';
+import { updateProfile } from 'firebase/auth';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -21,6 +23,37 @@ export default function RegisterPage() {
     letter: /[A-Za-z]/.test(password),
     match: password.length > 0 && password === confirmPassword,
   }), [password, confirmPassword]);
+
+  const handleSignUp = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      Alert.alert('Error', 'Please fill in all fields.');
+      return;
+    }
+
+    if (Object.values(passwordChecks).some(check => !check)) {
+      Alert.alert('Error', 'Password does not meet requirements.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Alert.alert('Error', 'Passwords do not match.');
+      return;
+    }
+
+    const result = await userAuthentication.register(name, email, password);
+    if (result.success) {
+      Alert.alert('Success', 'Account created successfully!');
+      router.push('/home');
+      
+      if (result.user) {
+        await updateProfile(result.user, {
+          displayName: name.trim(),
+        });
+      }
+    } else {
+      Alert.alert('Error', result.error);
+    }
+  }
 
   return (
     <View style={appStyles.screen}>
@@ -44,9 +77,6 @@ export default function RegisterPage() {
 
             <Text style={appStyles.label}>Email Address</Text>
             <TextInput style={appStyles.input} value={email} onChangeText={setEmail} keyboardType="email-address" autoCapitalize="none" />
-
-            <Text style={appStyles.label}>Birthday</Text>
-            <TextInput style={appStyles.input} value={birthday} onChangeText={setBirthday} placeholder="MM/DD/YYYY" placeholderTextColor={UCIColors.textGray} />
 
             <Text style={appStyles.label}>Create Password</Text>
             <TextInput style={appStyles.input} value={password} onChangeText={setPassword} secureTextEntry />
@@ -73,7 +103,7 @@ export default function RegisterPage() {
               {passwordChecks.match ? '✓' : '○'} Passwords match
             </Text>
 
-            <Pressable style={[appStyles.primaryButton, styles.registerButton]}>
+            <Pressable style={[appStyles.primaryButton, styles.registerButton]} onPress={handleSignUp}>
               <Text style={appStyles.primaryButtonText}>Register</Text>
             </Pressable>
           </View>
@@ -86,7 +116,7 @@ export default function RegisterPage() {
 const styles = StyleSheet.create({
   content: {
     alignItems: 'center',
-    paddingTop: 65,
+    paddingTop: 10,
     paddingBottom: 40,
   },
   subtitle: {

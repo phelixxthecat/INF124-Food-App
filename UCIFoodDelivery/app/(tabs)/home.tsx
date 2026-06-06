@@ -26,6 +26,22 @@ export default function HomePage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const [menuVisible, setMenuVisible] = useState(false);
+  const menuNavigation = [
+    {
+      title: 'Profile',
+      route: '/(tabs)/ProfilePages/profile',
+    },
+    {
+      title: 'About Us',
+      route: '/(tabs)/OnboardingPages/aboutUs',
+    },
+    {
+      title: 'Contact Us',
+      route: '/(tabs)/AboutUsPages/contactPage',
+    },
+  ];
+
   useEffect(() => {
     fetchRestaurants();
   }, []);
@@ -61,6 +77,36 @@ export default function HomePage() {
       <Text style={appStyles.pageLabel}>Home</Text>
 
       <View style={appStyles.card}>
+        {/* Menu navigation dropdown */}
+        <Pressable
+          style={styles.menuButton}
+          onPress={() => setMenuVisible(!menuVisible)}
+        >
+          <Ionicons
+            name="menu"
+            size={32}
+            color={UCIColors.navy}
+          />
+        </Pressable>
+        {menuVisible && (
+          <View style={styles.menu}>
+            <View style={styles.divider} />
+            {menuNavigation.map((item) => (
+              <Pressable
+                key={item.title}
+                onPress={() => {
+                  setMenuVisible(false);
+                  router.push(item.route as any);
+                }}
+              >
+                <Text style={styles.menuItem}>{item.title}</Text>
+                <View style={styles.divider} />
+              </Pressable>
+              
+            ))}
+          </View>
+        )}
+
         <Text style={appStyles.logo}>ZotEats</Text>
 
         <Text style={styles.subtitle}>
@@ -144,6 +190,33 @@ export default function HomePage() {
 }
 
 const styles = StyleSheet.create({
+  menuButton: {
+    position: 'absolute',
+    top: 20,
+    left: 20,
+    zIndex: 1000,
+  },
+  menu: {
+  position: 'absolute',
+  top: 55,
+  left: 20,
+  backgroundColor: UCIColors.cream,
+  borderRadius: 10,
+  padding: 8,
+  elevation: 5,
+  zIndex: 1000,
+},
+menuItem: {
+  paddingVertical: 8,
+  paddingHorizontal: 10,
+  color: UCIColors.navy,
+  fontWeight: '600',
+},
+divider: {
+  height: 2,
+  backgroundColor: UCIColors.blue,
+  marginVertical: 4,
+},
   subtitle: {
     marginTop: 8,
     marginBottom: 20,
