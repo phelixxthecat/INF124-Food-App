@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet, Alert, ScrollView } from 'react-native';
+import userAuthentication from '@/src/userAuthentication';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { appStyles, UCIColors } from '../../../constants/appStyles';
-import userAuthentication from '@/src/userAuthentication';
+import { SESSION_KEYS, setSessionJSON } from '../../../src/sessionStore';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,6 +19,7 @@ export default function LoginPage() {
 
     try {
       await userAuthentication.login(email, password);
+      setSessionJSON(SESSION_KEYS.customerEmail, email.trim());
       router.replace('/home');
     } catch (error: any) {
       let message = 'Unable to log in. Please try again.';
@@ -36,7 +38,7 @@ export default function LoginPage() {
           break;
       }
       Alert.alert('Login Failed', message);
-      }
+    }
   }
 
   return (

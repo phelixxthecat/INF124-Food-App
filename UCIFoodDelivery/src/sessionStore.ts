@@ -8,6 +8,7 @@ export const SESSION_KEYS = {
   selectedRestaurant: "zoteats.selectedRestaurant",
   restaurantMenu: "zoteats.restaurantMenu",
   checkoutCart: "zoteats.checkoutCart",
+  customerEmail: "zoteats.customerEmail",
 } as const;
 
 const memoryStore = new Map<string, string>();
