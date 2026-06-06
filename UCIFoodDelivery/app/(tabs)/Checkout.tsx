@@ -112,10 +112,12 @@ export default function Checkout() {
       return;
     }
 
+    const customer = getSessionJSON<string>(SESSION_KEYS.customerEmail) ?? 'Guest Customer';
+
     try {
       setPlacingOrder(true);
 
-      const response = await fetch('http://18.222.199.221:5000/api/orders', {
+      const response = await fetch('/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -123,6 +125,7 @@ export default function Checkout() {
         body: JSON.stringify({
           restaurantId: cart.restaurantId,
           restaurantName: cart.restaurantName,
+          customer,
           items: cart.items,
           subtotal,
           tax,
@@ -138,7 +141,7 @@ export default function Checkout() {
       removeSessionKey(SESSION_KEYS.checkoutCart);
       setCart(null);
 
-      Alert.alert('Order placed', 'Your order has been sent to the restaurant.');
+      router.replace('/home');
     } catch (error) {
       console.error('Failed to place order:', error);
       Alert.alert('Unable to place order', 'Please try again.');
