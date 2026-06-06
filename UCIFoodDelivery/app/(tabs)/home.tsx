@@ -55,7 +55,7 @@ export default function HomePage() {
   const fetchRestaurants = async () => {
     try {
       const response = await fetch(
-        'http://18.222.199.221:5000/api/restaurants'
+        '/api/restaurants'
       );
 
       const data = await response.json();
