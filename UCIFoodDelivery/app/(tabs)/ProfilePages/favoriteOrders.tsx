@@ -14,7 +14,7 @@ export default function FavoriteOrders() {
       <View style={appStyles.card}>
         <Pressable
           style={appStyles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.navigate('/(tabs)/ProfilePages/profile')}
         >
           <Ionicons
             name="arrow-back"
