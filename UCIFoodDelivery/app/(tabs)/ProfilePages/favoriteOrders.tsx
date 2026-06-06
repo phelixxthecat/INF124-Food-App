@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View, Image } from 'react-native';
 import { appStyles, UCIColors } from '../../../constants/appStyles';
 
 export default function FavoriteOrders() {
@@ -32,7 +32,7 @@ export default function FavoriteOrders() {
 
           {[1, 2, 3].map((item) => (
             <View key={item} style={styles.favoriteCard}>
-              <View style={styles.foodImage} />
+              <Image style={styles.foodImage} source={require('../../../assets/images/zotpizzacombo.jpg')}/>
 
               <View style={styles.favoriteInfo}>
                 <Text style={styles.restaurant}>
