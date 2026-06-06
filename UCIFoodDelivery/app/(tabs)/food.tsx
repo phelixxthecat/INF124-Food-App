@@ -86,7 +86,7 @@ export default function FoodPage() {
       setError(null);
 
       const response = await fetch(
-        `http://localhost:5000/api/menu/restaurant/${restaurant.restaurantId}`
+        `http://18.222.199.221:5000//api/menu/restaurant/${restaurant.restaurantId}`
       );
 
       if (!response.ok) {

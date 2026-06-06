@@ -115,7 +115,7 @@ export default function Checkout() {
     try {
       setPlacingOrder(true);
 
-      const response = await fetch('http://localhost:5000/api/orders', {
+      const response = await fetch('http://18.222.199.221:5000//api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
