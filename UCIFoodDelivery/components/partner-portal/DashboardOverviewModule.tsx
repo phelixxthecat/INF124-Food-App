@@ -9,6 +9,9 @@ type DashboardOverviewModuleProps = {
   activeOrders: number;
   todaysRevenue: number;
   partnerRating: number;
+  totalRestaurants?: number;
+  openRestaurants?: number;
+  totalMenuItems?: number;
 };
 
 type MetricCardProps = {
@@ -52,8 +55,16 @@ function MetricCard({ label, value, detail, iconName, highlight, onPress }: Metr
   );
 }
 
-export function DashboardOverviewModule({ activeOrders, todaysRevenue, partnerRating }: DashboardOverviewModuleProps) {
-  const colorScheme = useColorScheme() ?? 'light';
+export function DashboardOverviewModule({
+  activeOrders,
+  todaysRevenue,
+  partnerRating,
+  totalRestaurants,
+  openRestaurants,
+  totalMenuItems,
+}: DashboardOverviewModuleProps) {
+
+const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
 
   return (
@@ -79,7 +90,27 @@ export function DashboardOverviewModule({ activeOrders, todaysRevenue, partnerRa
           detail="Gold customer feedback"
           iconName="star"
           highlight
-          onPress={() => console.log('Partner Rating card pressed')}
+          onPress={() => console.log('Partner Rating card pressed')}   
+        />
+          <MetricCard
+    label="Total Restaurants"
+    value={String(totalRestaurants ?? 0)}
+    detail="Restaurants stored in MongoDB"
+    onPress={() => console.log('Total Restaurants card pressed')}
+  />
+
+  <MetricCard
+    label="Open Restaurants"
+    value={String(openRestaurants ?? 0)}
+    detail="Currently available restaurants"
+    onPress={() => console.log('Open Restaurants card pressed')}
+  />
+
+  <MetricCard
+          label="Menu Items"
+          value={String(totalMenuItems ?? 0)}
+          detail="Menu items stored in MongoDB"
+          onPress={() => console.log('Menu Items card pressed')}
         />
       </View>
     </View>

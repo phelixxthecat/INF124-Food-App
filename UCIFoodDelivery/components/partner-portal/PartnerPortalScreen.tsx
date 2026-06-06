@@ -15,6 +15,12 @@ import type { OrderStatus, PartnerPortalSnapshot, PortalOrder } from './types';
 const STATUS_OPTIONS: OrderStatus[] = ['Preparing', 'Ready for Pickup', 'Out for Delivery', 'Delivered'];
 const API_BASE_URL = 'http://localhost:5000';
 
+type AnalyticsData = {
+  totalRestaurants: number;
+  openRestaurants: number;
+  totalMenuItems: number;
+};
+
 export function PartnerPortalScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const theme = Colors[colorScheme];
@@ -23,6 +29,7 @@ export function PartnerPortalScreen() {
   const [isStatusModalVisible, setIsStatusModalVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
 
   const selectedOrderStatus = useMemo(() => selectedOrder?.status ?? null, [selectedOrder]);
 
@@ -35,9 +42,17 @@ export function PartnerPortalScreen() {
           throw new Error('Failed to load partner portal data');
         }
 
-        const data: PartnerPortalSnapshot = await response.json();
+       const data: PartnerPortalSnapshot = await response.json();
         setPortalData(data);
-        setLoadError(null);
+
+        const analyticsResponse = await fetch(`${API_BASE_URL}/api/analytics`);
+
+        if (analyticsResponse.ok) {
+        const analytics: AnalyticsData = await analyticsResponse.json();
+        setAnalyticsData(analytics);
+        }
+
+setLoadError(null);   
       } catch (error) {
         setLoadError('Unable to load partner portal data.');
         console.error('Failed to fetch partner portal data:', error);
@@ -104,9 +119,12 @@ export function PartnerPortalScreen() {
         ) : portalData ? (
           <>
             <DashboardOverviewModule
-              activeOrders={portalData.dashboardMetrics.activeOrders}
-              todaysRevenue={portalData.dashboardMetrics.todaysRevenue}
-              partnerRating={portalData.dashboardMetrics.partnerRating}
+            activeOrders={portalData.dashboardMetrics.activeOrders}
+            todaysRevenue={portalData.dashboardMetrics.todaysRevenue}
+            partnerRating={portalData.dashboardMetrics.partnerRating}
+            totalRestaurants={analyticsData?.totalRestaurants}
+            openRestaurants={analyticsData?.openRestaurants}
+            totalMenuItems={analyticsData?.totalMenuItems}
             />
 
             <LiveOrderManagementModule orders={orders} onStatusPress={openStatusModal} />
