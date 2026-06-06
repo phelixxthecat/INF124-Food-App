@@ -22,15 +22,7 @@ export default function LandingPage() {
           <Pressable style={appStyles.secondaryButton} onPress={() => router.push('/OnboardingPages/register')}>
             <Text style={appStyles.secondaryButtonText}>Register</Text>
           </Pressable>
-
-          <Pressable style={appStyles.outlineButton} onPress={() => router.push('/food')}>
-            <Text style={appStyles.outlineButtonText}>Browse as Guest</Text>
-          </Pressable>
         </View>
-
-        <Pressable style={styles.aboutButton} onPress={() => router.push('/OnboardingPages/aboutUs')}>
-          <Text style={styles.aboutText}>About Us</Text>
-        </Pressable>
       </View>
     </View>
   );
@@ -47,14 +39,5 @@ const styles = StyleSheet.create({
     marginTop: 170,
     gap: 22,
     alignItems: 'center',
-  },
-  aboutButton: {
-    position: 'absolute',
-    bottom: 24,
-  },
-  aboutText: {
-    color: UCIColors.navy,
-    fontSize: 13,
-    fontWeight: '800',
   },
 });

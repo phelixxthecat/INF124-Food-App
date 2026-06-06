@@ -12,7 +12,6 @@ export default function AboutUsPage() {
     { title: 'Who We Serve', subtitle: 'Students, staff, and campus visitors', route: '/AboutUsPages/servePage' },
     { title: 'How It Works', subtitle: 'Order, pickup, or campus delivery', route: '/AboutUsPages/howItWorksPage' },
     { title: 'Why Choose Us', subtitle: 'Fast UCI-focused food access', route: '/AboutUsPages/whyUsPage' },
-    { title: 'Contact Info', subtitle: 'Get help or reach our team', route: '/AboutUsPages/contactPage' },
   ];
 
   return (
@@ -20,7 +19,7 @@ export default function AboutUsPage() {
       <Text style={appStyles.pageLabel}>About Us Page</Text>
 
       <View style={appStyles.card}>
-        <Pressable style={appStyles.backButton} onPress={() => router.back()}>
+        <Pressable style={appStyles.backButton} onPress={() => router.navigate('/home')}>
           <Ionicons name="arrow-back" size={24} color={UCIColors.navy} />
         </Pressable>
 

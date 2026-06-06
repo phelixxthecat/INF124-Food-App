@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import { appStyles, UCIColors } from '../../constants/appStyles';
+<<<<<<< Updated upstream
 import { getSessionJSON, removeSessionKey, SESSION_KEYS } from '../../src/sessionStore';
 
 type CheckoutCartItem = {
@@ -84,6 +85,22 @@ export default function Checkout() {
       setPlacingOrder(false);
     }
   };
+=======
+import { useCart } from '../context/CartContext';
+
+export default function Checkout() {
+  const [text, onChangeText] = React.useState('');
+  const { cartItems, increaseItem, decreaseItem, clearCart } = useCart();
+
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+
+  const tax = subtotal * 0.08;
+  const delivery = subtotal > 0 ? 2.99 : 0;
+  const total = subtotal + tax + delivery;
+>>>>>>> Stashed changes
 
   return (
     <View style={appStyles.screen}>
@@ -107,6 +124,7 @@ export default function Checkout() {
               </View>
 
               <Text style={styles.heading}>Cart</Text>
+<<<<<<< Updated upstream
               <Text style={styles.restaurant}>{cart?.restaurantName ?? 'No restaurant selected'}</Text>
 
               {cart && cart.items.length > 0 ? (
@@ -121,14 +139,63 @@ export default function Checkout() {
                       <View style={styles.quantityRow}>
                         <Feather name="hash" size={17} color={UCIColors.navy} />
                         <Text style={styles.quantity}>Qty: {item.quantity}</Text>
+=======
+              <Text style={styles.restaurant}>Your selected items</Text>
+
+              {cartItems.length === 0 ? (
+                <Text style={styles.emptyText}>Your cart is empty.</Text>
+              ) : (
+                cartItems.map((item) => (
+                  <View key={item._id} style={styles.itemCard}>
+                    <View style={styles.itemImage}>
+                      <Text style={styles.itemImageText}>
+                        {item.name.charAt(0)}
+                      </Text>
+                    </View>
+
+                    <View style={styles.itemInfo}>
+                      <Text style={styles.itemName}>{item.name}</Text>
+
+                      {item.description ? (
+                        <Text style={styles.description}>
+                          {item.description}
+                        </Text>
+                      ) : null}
+
+                      <Text style={styles.price}>
+                        ${item.price.toFixed(2)}
+                      </Text>
+
+                      <View style={styles.quantityRow}>
+                        <Pressable onPress={() => decreaseItem(item._id)}>
+                          <Feather
+                            name="minus-circle"
+                            size={26}
+                            color={UCIColors.navy}
+                          />
+                        </Pressable>
+
+                        <Text style={styles.quantity}>{item.quantity}</Text>
+
+                        <Pressable onPress={() => increaseItem(item._id)}>
+                          <Feather
+                            name="plus-circle"
+                            size={26}
+                            color={UCIColors.navy}
+                          />
+                        </Pressable>
+>>>>>>> Stashed changes
                       </View>
                     </View>
                   </View>
                 ))
+<<<<<<< Updated upstream
               ) : (
                 <View style={styles.emptyCard}>
                   <Text style={styles.emptyText}>No items found in checkout cart.</Text>
                 </View>
+=======
+>>>>>>> Stashed changes
               )}
 
               {cart && cart.items.length > 0 ? <View style={styles.divider} /> : null}
@@ -136,7 +203,11 @@ export default function Checkout() {
               <Text style={styles.heading}>Summary</Text>
 
               <View style={styles.couponBox}>
-                <Ionicons name="pricetag-outline" size={22} color={UCIColors.navy} />
+                <Ionicons
+                  name="pricetag-outline"
+                  size={22}
+                  color={UCIColors.navy}
+                />
                 <TextInput
                   style={styles.couponInput}
                   placeholder="Apply Coupon"
@@ -148,23 +219,36 @@ export default function Checkout() {
 
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryText}>Subtotal</Text>
+<<<<<<< Updated upstream
                 <Text style={styles.summaryText}>{formatPrice(subtotal)}</Text>
+=======
+                <Text style={styles.summaryText}>${subtotal.toFixed(2)}</Text>
+>>>>>>> Stashed changes
               </View>
 
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryText}>Tax</Text>
+<<<<<<< Updated upstream
                 <Text style={styles.summaryText}>{formatPrice(tax)}</Text>
+=======
+                <Text style={styles.summaryText}>${tax.toFixed(2)}</Text>
+>>>>>>> Stashed changes
               </View>
 
               <View style={styles.summaryRow}>
                 <Text style={styles.summaryText}>Delivery</Text>
+<<<<<<< Updated upstream
                 <Text style={styles.summaryText}>{formatPrice(deliveryFee)}</Text>
+=======
+                <Text style={styles.summaryText}>${delivery.toFixed(2)}</Text>
+>>>>>>> Stashed changes
               </View>
 
               <View style={styles.dashedDivider} />
 
               <View style={styles.summaryRow}>
                 <Text style={styles.totalText}>Total</Text>
+<<<<<<< Updated upstream
                 <Text style={styles.totalText}>{formatPrice(total)}</Text>
               </View>
 
@@ -174,6 +258,25 @@ export default function Checkout() {
                 disabled={!cart || cart.items.length === 0 || placingOrder}
               >
                 <Text style={appStyles.primaryButtonText}>{placingOrder ? 'Placing...' : 'Place Order'}</Text>
+=======
+                <Text style={styles.totalText}>${total.toFixed(2)}</Text>
+              </View>
+
+              <Pressable
+                style={[
+                  appStyles.primaryButton,
+                  cartItems.length === 0 && styles.disabledButton,
+                ]}
+                disabled={cartItems.length === 0}
+                onPress={() => {
+                  alert('Order placed!');
+                  clearCart();
+                }}
+              >
+                <Text style={appStyles.primaryButtonText}>
+                  Continue
+                </Text>
+>>>>>>> Stashed changes
               </Pressable>
             </ScrollView>
           </TouchableWithoutFeedback>
@@ -234,6 +337,13 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
 
+  emptyText: {
+    width: 270,
+    color: UCIColors.textGray,
+    fontWeight: '700',
+    marginBottom: 14,
+  },
+
   itemCard: {
     width: 270,
     flexDirection: 'row',
@@ -249,7 +359,17 @@ const styles = StyleSheet.create({
     width: 75,
     height: 75,
     borderRadius: 16,
-    backgroundColor: UCIColors.gray,
+    backgroundColor: UCIColors.cream,
+    borderWidth: 1,
+    borderColor: UCIColors.gold,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  itemImageText: {
+    color: UCIColors.navy,
+    fontSize: 28,
+    fontWeight: '900',
   },
 
   itemInfo: {
@@ -269,6 +389,13 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
 
+  price: {
+    fontSize: 13,
+    color: UCIColors.navy,
+    fontWeight: '800',
+    marginTop: 6,
+  },
+
   quantityRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -277,8 +404,8 @@ const styles = StyleSheet.create({
   },
 
   quantity: {
-    fontSize: 14,
-    fontWeight: '800',
+    fontSize: 15,
+    fontWeight: '900',
     color: UCIColors.black,
   },
 
@@ -348,7 +475,12 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 
+<<<<<<< Updated upstream
   buttonDisabled: {
     opacity: 0.55,
+=======
+  disabledButton: {
+    opacity: 0.5,
+>>>>>>> Stashed changes
   },
 });

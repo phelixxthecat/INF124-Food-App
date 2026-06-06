@@ -32,7 +32,7 @@ export default function InfoTemplatePage({
         {/* BACK BUTTON */}
         <Pressable
           style={appStyles.backButton}
-          onPress={() => router.back()}
+          onPress={() => router.navigate('/home')}
         >
           <Ionicons
             name="arrow-back"

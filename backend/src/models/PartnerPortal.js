@@ -10,6 +10,10 @@ const portalOrderSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    restaurantName: {
+      type: String,
+      required: true,
+    },
     items: {
       type: String,
       required: true,

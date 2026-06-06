@@ -3,10 +3,8 @@ require("dotenv").config();
 const connectDB = require("./config/db");
 const Restaurant = require("./models/Restaurant");
 const MenuItem = require("./models/MenuItem");
-const PartnerPortal = require("./models/PartnerPortal");
 const restaurants = require("./data/restaurantsData");
 const menuItemsData = require("./data/menuItemsData");
-const partnerPortalData = require("./data/partnerPortalData");
 
 const seedData = async () => {
   try {
@@ -41,12 +39,8 @@ const seedData = async () => {
     await MenuItem.deleteMany();
     await MenuItem.insertMany(menuItems);
 
-    await PartnerPortal.deleteMany();
-    await PartnerPortal.create(partnerPortalData);
-
     console.log("Restaurants seeded successfully!");
     console.log("Menu items seeded successfully!");
-    console.log("Partner portal seeded successfully!");
     process.exit();
   } catch (error) {
     console.error("Seed failed:", error);
